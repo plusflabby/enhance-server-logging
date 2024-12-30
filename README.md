@@ -9,12 +9,12 @@ The *Enhance Logging* system by "flabby" for *Arma Reforger* provides detailed a
 Commands,
 - #loghelp
 - #log format [COMPACT|NORMAL|RICH]
-- #log category [DEBUG|INFO|ALL]
+- #log category [DEBUG|INFO|ALL] (WIP)
 - #log extension [JSON|LOG|TXT]
 
 Example commands,
 - #log format RICH
-- #log category ALL
+- #log category ALL - WIP
 - #log extension TXT
 
 Questions, Suggestions, and Issues @ [https://www.flabby.dev/discord](https://www.flabby.dev/discord)
