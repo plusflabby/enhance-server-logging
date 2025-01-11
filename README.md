@@ -43,3 +43,7 @@ Questions, Suggestions, and Issues @ [https://www.flabby.dev/discord](https://ww
 # Version 1.3.0
 - Cache bohemia id and name
 - Include player's name and bohemia id for logs
+
+# Version 1.3.5
+- Fix class flabby_logger
+- Fix function removeOldIdentifiers
