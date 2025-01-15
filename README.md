@@ -47,3 +47,6 @@ Questions, Suggestions, and Issues @ [https://www.flabby.dev/discord](https://ww
 # Version 1.3.5
 - Fix class flabby_logger
 - Fix function removeOldIdentifiers
+
+# Version 1.3.6
+- Add identifiable name to each log
