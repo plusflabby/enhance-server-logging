@@ -50,3 +50,7 @@ Questions, Suggestions, and Issues @ [https://www.flabby.dev/discord](https://ww
 
 # Version 1.3.6
 - Add identifiable name to each log
+
+# Version 1.4.0
+- Expose logs though a function
+- Add public ScriptInvoker for modders
