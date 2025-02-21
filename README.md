@@ -54,3 +54,6 @@ Questions, Suggestions, and Issues @ [https://www.flabby.dev/discord](https://ww
 # Version 1.4.0
 - Expose logs though a function
 - Add public ScriptInvoker for modders
+
+# Version 1.5.0
+- Logging chat messages
