@@ -57,3 +57,8 @@ Questions, Suggestions, and Issues @ [https://www.flabby.dev/discord](https://ww
 
 # Version 1.5.0
 - Logging chat messages
+
+# Version 1.6.0
+- Add data point to killing (factions of each side)
+- Discord Webhook(s)
+- Configuration File (formatted / pretty)
