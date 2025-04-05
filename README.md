@@ -18,27 +18,22 @@ Take control of your server’s data like never before with Enhance Logging, a p
 Whether you’re a developer or a server operator, Enhance Logging is your solution for reliable tracking. The system currently focuses on `SCR_GameMode` logs, with planned online searchability if enough downloads are reached!  
 
 ### **Folder Structure Made Simple**  
-Your logs are neatly organized in `ServerProfile/flabby/logs/YEAR/MONTH/DAY`. Open and format them effortlessly with tools like VSCode or your preferred methods.  
+Your logs are neatly organized in `ServerProfile/flabby/YEAR/MONTH/DAY`. Open and format them effortlessly with tools like VSCode or your preferred methods.  
 
 ### **Easy-to-Use Commands:**  
 - **#loghelp**: List all available commands.  
 - **#log format [COMPACT|NORMAL|RICH]**: Adjust log detail level.  
-- **#log category [DEBUG|INFO|ALL] (WIP)**: Fine-tune log categories.  
+- **#log category [DEBUG|INFO|ALL]**: Fine-tune log categories.  
 - **#log extension [JSON|LOG|TXT]**: Choose your file format.  
 
 **Examples:**  
 - `#log format RICH`  
-- `#log category ALL` *(WIP)*  
+- `#log category ALL`
 - `#log extension TXT`  
 
 **Download Enhance Logging now and redefine your Arma Reforger experience!**
 
 Questions, Suggestions, and Issues @ [https://www.flabby.dev/discord](https://www.flabby.dev/discord)
-
-# Source code is NOT Public
-
-## ARMA PUBLIC LICENSE NO DERIVATIVES (APL-ND) [LINK](https://www.bohemia.net/community/licenses/arma-public-license-nd)
-
 
 # Version 1.3.0
 - Cache bohemia id and name

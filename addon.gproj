@@ -1,0 +1,22 @@
+GameProject {
+ ID "Enhancedserverlogging"
+ GUID "6316335D6A19E51C"
+ TITLE "Enhanced server logging by flabby"
+ Dependencies {
+  "58D0FB3206B6F859"
+ }
+ Configurations {
+  GameProjectConfig PC {
+  }
+  GameProjectConfig XBOX_ONE {
+  }
+  GameProjectConfig XBOX_SERIES {
+  }
+  GameProjectConfig PS4 {
+  }
+  GameProjectConfig PS5 {
+  }
+  GameProjectConfig HEADLESS {
+  }
+ }
+}
