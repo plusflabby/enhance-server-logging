@@ -31,6 +31,8 @@ modded class SCR_ChatComponent
 	
 	override void OnNewMessage(string msg, int channelId, int senderId)
 	{
+		super.OnNewMessage(msg, channelId, senderId);
+		
 		if (GetGame().GetPlayerController().GetPlayerId() == senderId)
 			Rpc(flabby_OnNewMessage, msg, channelId, senderId);
 	}
@@ -74,6 +76,8 @@ modded class SCR_ChatComponent
 	
 	override void OnNewPrivateMessage(string msg, int senderId, int receiverId)
 	{
+		super.OnNewPrivateMessage(msg, senderId, receiverId);
+		
 		if (GetGame().GetPlayerController().GetPlayerId() == senderId)
 			Rpc(flabby_OnNewPrivateMessage, msg, senderId, receiverId);
 	}

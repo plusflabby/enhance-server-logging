@@ -81,7 +81,7 @@ class flabby_logger_update
 		// Check file 
 		if (FileIO.FileExists(fileLocation) == false)
 		{
-			return false;
+			SCR_FileIOHelper.WriteFileContent(cfgV2_file, {});
 		}
 		// Open file 
 		SCR_JsonLoadContext fileJsonReader = new SCR_JsonLoadContext();
