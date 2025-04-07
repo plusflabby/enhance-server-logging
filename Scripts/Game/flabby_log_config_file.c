@@ -71,11 +71,6 @@ class flabby_logger_update
 	// Add new object (key with value)
 	static bool addKeyToFile(string keyName, string value)
 	{
-		// If key is already set then update value
-		string keyChecking = string.Empty;
-		getValueInFile(keyName, keyChecking);
-		bool keyExists = keyChecking.IsEmpty() == false;
-		
 		// File location
 		string fileLocation = string.Format(cfgV2_file);
 		// Check file 
@@ -94,6 +89,10 @@ class flabby_logger_update
 		BaseJsonSerializationSaveContainer jsonContainer = new PrettyJsonSaveContainer();
 		jsonContainer.SetMaxDecimalPlaces(5);
 		writer.SetContainer(jsonContainer);
+		// If key is already set then update value
+		string keyChecking = string.Empty;
+		getValueInFile(keyName, keyChecking);
+		bool keyExists = keyChecking.IsEmpty() == false && keyChecking != "_NONE";
 		
 		if (keyExists)
 		{
@@ -105,10 +104,6 @@ class flabby_logger_update
 				if (fileJsonReader.ReadValue(keyInFile, valueInFile) == false)
 				{
 					writer.WriteValue(keyInFile, string.Empty);
-				}
-				else if (keyName == cfgV2_keys)
-				{
-					continue;
 				}
 				else if (keyName == keyInFile)
 				{
@@ -149,9 +144,8 @@ class flabby_logger_update
 			writer.WriteValue(keyName, value);
 			// Write to json's keys
 			if (fileKeys.Find(keyName) == -1) fileKeys.Insert(keyName);
-			writer.WriteValue(cfgV2_keys, fileKeys);
 		}
-		
+		writer.WriteValue(cfgV2_keys, fileKeys);
 	
 		jsonContainer.SaveToFile(fileLocation);
 		return true;

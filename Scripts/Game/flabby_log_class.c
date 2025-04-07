@@ -241,7 +241,6 @@ class flabby_logger
 			flabby_logger_update.updateExtension(flabby_log_output_extension.JSON);
 			flabby_logger_update.updateFormat(flabby_log_output_format.RICH);
 			flabby_logger_update.updateCategory(flabby_log_output_category.ALL);
-			return;
 		}
 		
 		// Get extension from cfg file or set to default

@@ -17,7 +17,11 @@ bool flabby_log_webhook_setup()
 	{
 		string webhook_value = string.Empty;
 		flabby_logger_update.getValueInFile(flabby_log_webhooks_list.Get(i), webhook_value);
-		if (webhook_value == "_NONE") rntValue = false;
+		if (webhook_value == "_NONE")
+		{
+			rntValue = false;
+			break;
+		}
 	}
 	
 	return rntValue;
