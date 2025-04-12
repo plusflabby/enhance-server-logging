@@ -251,16 +251,16 @@ modded class SCR_BaseGameMode
 			log.add("VictimPlayerName", getPlayerName(instigatorContextData.GetVictimPlayerID()));
 			
 			Faction faction = GetEntityFaction(instigatorContextData.GetVictimPlayerID());
-			if (faction) log.add("playerFaction", faction.GetFactionName());
-			else log.add("playerFaction", "UNKNOWN");
+			if (faction) log.add("VictimPlayerFaction", faction.GetFactionName());
+			else log.add("VictimPlayerFaction", "UNKNOWN");
 			
 			log.add("KillerPlayerID", instigatorContextData.GetKillerPlayerID().ToString());
 			log.add("KillerPlayerBiId", getPlayerBohemiaId(instigatorContextData.GetKillerPlayerID()));
 			log.add("KillerPlayerName", getPlayerName(instigatorContextData.GetKillerPlayerID()));
 			
 			Faction faction2 = GetEntityFaction(instigatorContextData.GetKillerPlayerID());
-			if (faction) log.add("playerFaction", faction2.GetFactionName());
-			else log.add("playerFaction", "UNKNOWN");
+			if (faction2) log.add("KillerPlayerFaction", faction2.GetFactionName());
+			else log.add("KillerPlayerFaction", "UNKNOWN");
 			
 			log.setDebugTime();
 			log.category = flabby_log_output_category.INFO;
@@ -334,8 +334,9 @@ modded class SCR_BaseGameMode
 			log.add("playerId", playerId);
 			log.add("cause", KickCauseCode.NONE.ToString());
 			log.add("timeout", timeout);
-			log.add("function", "Disconnected");
+			log.add("function", "CompDisconnected");
 			log.add("playerName", getPlayerName(playerId));
+			log.add("playerBiId", getPlayerBohemiaId(playerId));
 			
 			Faction faction = GetEntityFaction(playerId);
 			if (faction) log.add("playerFaction", faction.GetFactionName());
