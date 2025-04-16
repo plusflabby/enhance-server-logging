@@ -227,6 +227,8 @@ class flabby_logger
 	flabby_log_output_extension extension = flabby_log_output_extension.JSON;
 	flabby_log_output_format format = flabby_log_output_format.RICH;
 	flabby_log_output_category category = flabby_log_output_category.ALL;
+	bool printLog = true;
+	string serverName = string.Empty;
 	
 	//! constructor
 	void flabby_logger()
@@ -241,6 +243,8 @@ class flabby_logger
 			flabby_logger_update.updateExtension(flabby_log_output_extension.JSON);
 			flabby_logger_update.updateFormat(flabby_log_output_format.RICH);
 			flabby_logger_update.updateCategory(flabby_log_output_category.ALL);
+			flabby_logger_update.addKeyToFile("flabby_log_output_server_console", "TRUE");
+			flabby_logger_update.addKeyToFile("flabby_log_output_server_name", "EXAMPLE SERVER NAME");
 		}
 		
 		// Get extension from cfg file or set to default
@@ -249,6 +253,18 @@ class flabby_logger
 		jsonLoader.ReadValue("flabby_log_output_extension", extension);
 		jsonLoader.ReadValue("flabby_log_output_format", format);
 		jsonLoader.ReadValue("flabby_log_output_category", category);
+		if (jsonLoader.ReadValue("flabby_log_output_server_name", serverName) == false)
+		{
+			flabby_logger_update.addKeyToFile("flabby_log_output_server_name", "EXAMPLE SERVER NAME");
+			serverName = "EXAMPLE SERVER NAME";
+		}
+		string printerLogCfg = "TRUE";
+		if (jsonLoader.ReadValue("flabby_log_output_server_console", printerLogCfg) == false)
+		{
+			flabby_logger_update.addKeyToFile("flabby_log_output_server_console", "TRUE");
+		}
+		if (printerLogCfg == "TRUE") printLog = true;
+		else printLog = false;
 		
 		// Webhooks configuration
 		bool webhooks_config = flabby_log_webhook_setup();
@@ -261,10 +277,15 @@ class flabby_logger
 	//! Prints the log
 	void printer(notnull flabby_log log)
 	{
+		log.add("ServerName", serverName);
+		
 		string logStr = log.AsString();
 		if (logStr.IsEmpty() == false)
 		{
-			Print(string.Format("%1 [ %2 ]", printPrefix, logStr), LogLevel.NORMAL);
+			if (printLog)
+			{
+				Print(string.Format("%1 [ %2 ]", printPrefix, logStr), LogLevel.NORMAL);
+			}
 		}
 	}
 	
@@ -283,6 +304,8 @@ class flabby_logger
 		FileIO.MakeDirectory(string.Format("$profile:/flabby/%1", year));
 		FileIO.MakeDirectory(string.Format("$profile:/flabby/%1/%2", year, month));
 		FileIO.MakeDirectory(string.Format("$profile:/flabby/%1/%2/%3", year, month, day));
+		
+		log.add("ServerName", serverName);
 		
 		// Data to store in file
 		string data = string.Empty;

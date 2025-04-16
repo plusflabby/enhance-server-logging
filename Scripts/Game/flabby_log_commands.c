@@ -92,7 +92,9 @@ class flabby_log_cmd_help : flabby_log_command
 		helpString += "Examples of updating log extensions,\n";
 		helpString += "#log extension JSON - File(s) will be .json\n";
 		helpString += "#log extension LOG - File(s) will in .log\n";;
-		helpString += "#log extension TXT - File(s) will plain .txt\n";;
+		helpString += "#log extension TXT - File(s) will plain .txt\n";
+		helpString += "Example to disable server log printing,\n";
+		helpString += "#log print false - No printing in server console log\n";
 		
 		return ScrServerCmdResult(helpString, EServerCmdResultType.OK);
 	}
@@ -193,6 +195,22 @@ class flabby_log_cmd_config : flabby_log_command
 					{
 						flabby_logger_update.updateExtension(flabby_log_output_extension.TXT);
 						return ScrServerCmdResult(string.Format("Success, updated extension to TXT"), EServerCmdResultType.OK);
+					}
+					break;
+				}
+				case "print":
+				{
+					if (argThree == "TRUE")
+					{
+						flabby_logger_update.addKeyToFile("flabby_log_output_server_console", "TRUE");
+						flabbyLogger.printLog = true;
+						return ScrServerCmdResult(string.Format("Success, updated to TRUE"), EServerCmdResultType.OK);
+					}
+					if (argThree == "FALSE")
+					{
+						flabby_logger_update.addKeyToFile("flabby_log_output_server_console", "FALSE");
+						flabbyLogger.printLog = false;
+						return ScrServerCmdResult(string.Format("Success, updated to FALSE"), EServerCmdResultType.OK);
 					}
 					break;
 				}

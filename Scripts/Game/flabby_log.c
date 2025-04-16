@@ -468,7 +468,6 @@ modded class SCR_BaseGameMode
 			log.category = flabby_log_output_category.DEBUG;
 			// Print and store log
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
-			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			flabbyLogger.printer(log);
 			flabbyLogger.writer(log);
 		}
