@@ -359,8 +359,8 @@ modded class SCR_BaseGameMode
 		if (log && flabbyLogger)
 		{
 			// Add playerId to log
-			log.add("playerId", playerId, flabby_log_output_format.COMPACT);
-			log.add("function", "AuditSuccess", flabby_log_output_format.COMPACT);
+			log.add("playerId", playerId);
+			log.add("function", "AuditSuccess");
 			log.add("playerBiId", getPlayerBohemiaId(playerId));
 			log.add("playerName", getPlayerName(playerId));
 			
