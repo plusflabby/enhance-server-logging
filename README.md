@@ -1,5 +1,3 @@
-Take control of your server’s data like never before with Enhance Logging, a powerful, customizable logging system designed to elevate your server management experience.
-
 # Amra Reforger Mod Workshop
 [Arma Reforger Workshop](https://reforger.armaplatform.com/workshop/6316335D6A19E51C)
 
@@ -7,6 +5,8 @@ Take control of your server’s data like never before with Enhance Logging, a p
 **Introducing Enhance Logging by "flabby" for Arma Reforger**  
 
 Take control of your server’s data like never before with Enhance Logging, a powerful, customizable logging system designed to elevate your server management experience.  
+
+![](./thumbnail.png)
 
 ### **Key Features:**  
 - **Detailed & Persistent Logs**: Track every critical event with logs stored locally as `.json` files or online (based on downloads).  
