@@ -258,6 +258,21 @@ modded class SCR_BaseGameMode
 			log.add("KillerPlayerBiId", getPlayerBohemiaId(instigatorContextData.GetKillerPlayerID()));
 			log.add("KillerPlayerName", getPlayerName(instigatorContextData.GetKillerPlayerID()));
 			
+			
+			log.add("VictimKillerRelation", SCR_Enum.GetEnumName(SCR_ECharacterDeathStatusRelations, instigatorContextData.GetVictimKillerRelation()));
+			log.add("DoesPlayerKillCountAsTeamKill", instigatorContextData.DoesPlayerKillCountAsTeamKill());
+			
+			BaseWeaponManagerComponent wpnManager = BaseWeaponManagerComponent.Cast(instigatorContextData.GetKillerEntity().FindComponent(BaseWeaponManagerComponent));
+			if (wpnManager)
+			{
+				WeaponSlotComponent currentSlot = WeaponSlotComponent.Cast(wpnManager.GetCurrent());
+				if (currentSlot)
+				{
+					log.add("KillerPlayerWeaponType", SCR_Enum.GetEnumName(EWeaponType, currentSlot.GetWeaponType()));
+					log.add("KillerPlayerWeaponName", currentSlot.GetUIInfo().GetName());
+				}
+			}
+			
 			Faction faction2 = GetEntityFaction(instigatorContextData.GetKillerPlayerID());
 			if (faction2) log.add("KillerPlayerFaction", faction2.GetFactionName());
 			else log.add("KillerPlayerFaction", "UNKNOWN");
