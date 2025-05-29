@@ -6,7 +6,8 @@ ref array<string> flabby_log_webhooks_list = {
 	"webhooks_gamemode_player_spawned",
 	"webhooks_gamemode_player_killed",
 	"webhooks_gamemode_player_deleted",
-	"webhooks_gamemode_chat_onnewmessage"
+	"webhooks_gamemode_chat_onnewmessage",
+	"webhooks_gamemode_building_delete"
 };
 
 bool flabby_log_webhook_setup()
@@ -49,133 +50,74 @@ void flabby_log_webhook_send(flabby_log_output_extension extension, flabby_log_o
 	{
 		case flabby_log_identifier.SCR_GameMode_101:
 		{
-			string webhook_value = string.Empty;
-			flabby_logger_update.getValueInFile("webhooks_gamemode_player_connected", webhook_value);
-			if (webhook_value.IsEmpty() == false && webhook_value != "_NONE")
-			{
-				// Send http post to webhook_value
-				string LogToSend = string.Empty;
-				log.build(LogToSend, flabby_log_output_extension.JSON);
-				RestContext rc = GetGame().GetRestApi().GetContext(webhook_value);
-				rc.SetHeaders("Content-Type,application/json");
-				rc.POST(null, string.Empty, LogToSend);
-			}
+			GetWebookAndSendJson("webhooks_gamemode_player_connected", log);
 			break;
 		}
 		
 		case flabby_log_identifier.SCR_GameMode_106:
 		{
-			string webhook_value = string.Empty;
-			flabby_logger_update.getValueInFile("webhooks_gamemode_player_registered", webhook_value);
-			if (webhook_value.IsEmpty() == false && webhook_value != "_NONE")
-			{
-				// Send http post to webhook_value
-				string LogToSend = string.Empty;
-				log.build(LogToSend, flabby_log_output_extension.JSON);
-				RestContext rc = GetGame().GetRestApi().GetContext(webhook_value);
-				rc.SetHeaders("Content-Type,application/json");
-				rc.POST(null, string.Empty, LogToSend);
-			}
+			GetWebookAndSendJson("webhooks_gamemode_player_registered", log);
 			break;
 		}
 		
 		case flabby_log_identifier.SCR_GameMode_107:
 		{
-			string webhook_value = string.Empty;
-			flabby_logger_update.getValueInFile("webhooks_gamemode_player_disconnected", webhook_value);
-			if (webhook_value.IsEmpty() == false && webhook_value != "_NONE")
-			{
-				// Send http post to webhook_value
-				string LogToSend = string.Empty;
-				log.build(LogToSend, flabby_log_output_extension.JSON);
-				RestContext rc = GetGame().GetRestApi().GetContext(webhook_value);
-				rc.SetHeaders("Content-Type,application/json");
-				rc.POST(null, string.Empty, LogToSend);
-			}
+			GetWebookAndSendJson("webhooks_gamemode_player_disconnected", log);
 			break;
 		}
 		
 		case flabby_log_identifier.SCR_GameMode_109:
 		{
-			string webhook_value = string.Empty;
-			flabby_logger_update.getValueInFile("webhooks_gamemode_player_spawned", webhook_value);
-			if (webhook_value.IsEmpty() == false && webhook_value != "_NONE")
-			{
-				// Send http post to webhook_value
-				string LogToSend = string.Empty;
-				log.build(LogToSend, flabby_log_output_extension.JSON);
-				RestContext rc = GetGame().GetRestApi().GetContext(webhook_value);
-				rc.SetHeaders("Content-Type,application/json");
-				rc.POST(null, string.Empty, LogToSend);
-			}
+			GetWebookAndSendJson("webhooks_gamemode_player_spawned", log);
 			break;
 		}
 		
 		case flabby_log_identifier.SCR_GameMode_110:
 		{
-			string webhook_value = string.Empty;
-			flabby_logger_update.getValueInFile("webhooks_gamemode_player_killed", webhook_value);
-			if (webhook_value.IsEmpty() == false && webhook_value != "_NONE")
-			{
-				// Send http post to webhook_value
-				string LogToSend = string.Empty;
-				log.build(LogToSend, flabby_log_output_extension.JSON);
-				RestContext rc = GetGame().GetRestApi().GetContext(webhook_value);
-				rc.SetHeaders("Content-Type,application/json");
-				rc.POST(null, string.Empty, LogToSend);
-			}
+			GetWebookAndSendJson("webhooks_gamemode_player_killed", log);
 			break;
 		}
 		
 		case flabby_log_identifier.SCR_GameMode_114:
 		{
-			string webhook_value = string.Empty;
-			flabby_logger_update.getValueInFile("webhooks_gamemode_player_deleted", webhook_value);
-			if (webhook_value.IsEmpty() == false && webhook_value != "_NONE")
-			{
-				// Send http post to webhook_value
-				string LogToSend = string.Empty;
-				log.build(LogToSend, flabby_log_output_extension.JSON);
-				RestContext rc = GetGame().GetRestApi().GetContext(webhook_value);
-				rc.SetHeaders("Content-Type,application/json");
-				rc.POST(null, string.Empty, LogToSend);
-			}
+			GetWebookAndSendJson("webhooks_gamemode_player_deleted", log);
 			break;
 		}
 		
 		case flabby_log_identifier.SCR_ChatComponent_101:
 		{
-			string webhook_value = string.Empty;
-			flabby_logger_update.getValueInFile("webhooks_gamemode_chat_onnewmessage", webhook_value);
-			if (webhook_value.IsEmpty() == false && webhook_value != "_NONE")
-			{
-				// Send http post to webhook_value
-				string LogToSend = string.Empty;
-				log.build(LogToSend, flabby_log_output_extension.JSON);
-				RestContext rc = GetGame().GetRestApi().GetContext(webhook_value);
-				rc.SetHeaders("Content-Type,application/json");
-				rc.POST(null, string.Empty, LogToSend);
-			}
+			GetWebookAndSendJson("webhooks_gamemode_chat_onnewmessage", log);
+			break;
+		}
+		
+		case flabby_log_identifier.SCR_Building_101:
+		{
+			GetWebookAndSendJson("webhooks_gamemode_building_delete", log);
 			break;
 		}
 		
 		default:
 		{
-			string webhook_value = string.Empty;
-			flabby_logger_update.getValueInFile("webhooks_all", webhook_value);
-			if (webhook_value.IsEmpty() == false && webhook_value != "_NONE")
-			{
-				// Send http post to webhook_value
-				string LogToSend = string.Empty;
-				log.build(LogToSend, flabby_log_output_extension.JSON);
-				RestContext rc = GetGame().GetRestApi().GetContext(webhook_value);
-				rc.SetHeaders("Content-Type,application/json");
-				rc.POST(null, string.Empty, LogToSend);
-			}
+			GetWebookAndSendJson("webhooks_all", log);
 			break;
 		}
 	}
 	return;
+}
+
+void GetWebookAndSendJson(string configJsonKey, flabby_log log)
+{
+	string webhook_value = string.Empty;
+	flabby_logger_update.getValueInFile(configJsonKey, webhook_value);
+	if (webhook_value.IsEmpty() == false && webhook_value != "_NONE")
+	{
+		// Send http post to webhook_value
+		string LogToSend = string.Empty;
+		log.build(LogToSend, flabby_log_output_extension.JSON);
+		RestContext rc = GetGame().GetRestApi().GetContext(webhook_value);
+		rc.SetHeaders("Content-Type,application/json");
+		rc.POST(null, string.Empty, LogToSend);
+	}
 }
 
 void flabby_setWebhook()

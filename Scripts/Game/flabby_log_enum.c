@@ -64,5 +64,7 @@ enum flabby_log_identifier
 	SCR_ChatComponent_GENERIC, // Any ChatComponent log without an identifier
 	SCR_ChatComponent_101, // OnNewMessage() // When someone sends chat message
 	
+	SCR_Building_101, // SCR_CampaignBuildingNetworkComponent.SendDeleteNotification() // When disassembled structure
+	
 	CUSTOM_Extract, // Extract is requested // When joining
 }
