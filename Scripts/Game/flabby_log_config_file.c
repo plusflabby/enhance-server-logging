@@ -153,7 +153,7 @@ class flabby_logger_update
 	static void getValueInFile(string keyName, out string outValue)
 	{
 		// default value
-		string defValue = "_NONE";
+		const string defValue = "_NONE";
 		// File location
 		string fileLocation = cfgV2_file;
 		// Check file 

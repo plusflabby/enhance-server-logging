@@ -293,8 +293,8 @@ modded class SCR_BaseGameMode
 		if (log && flabbyLogger)
 		{
 			// Add playerId to log
-			log.add("playerId", playerId);
 			log.add("function", "PlayerSpawned");
+			log.add("playerId", playerId);
 			log.add("playerOrigin", player.GetOrigin().ToString(true));
 			log.add("playerBiId", getPlayerBohemiaId(playerId));
 			log.add("playerName", getPlayerName(playerId));
@@ -320,10 +320,10 @@ modded class SCR_BaseGameMode
 		if (log && flabbyLogger)
 		{
 			// Add playerId to log
+			log.add("function", "Disconnected");
 			log.add("playerId", playerId);
 			log.add("cause", KickCauseCode.NONE.ToString());
 			log.add("timeout", timeout);
-			log.add("function", "Disconnected");
 			log.add("playerBiId", getPlayerBohemiaId(playerId));
 			log.add("playerName", getPlayerName(playerId));
 			
@@ -346,10 +346,10 @@ modded class SCR_BaseGameMode
 		if (log && flabbyLogger)
 		{
 			// Add playerId to log
+			log.add("function", "CompDisconnected");
 			log.add("playerId", playerId);
 			log.add("cause", KickCauseCode.NONE.ToString());
 			log.add("timeout", timeout);
-			log.add("function", "CompDisconnected");
 			log.add("playerName", getPlayerName(playerId));
 			log.add("playerBiId", getPlayerBohemiaId(playerId));
 			
@@ -374,8 +374,8 @@ modded class SCR_BaseGameMode
 		if (log && flabbyLogger)
 		{
 			// Add playerId to log
-			log.add("playerId", playerId);
 			log.add("function", "AuditSuccess");
+			log.add("playerId", playerId);
 			log.add("playerBiId", getPlayerBohemiaId(playerId));
 			log.add("playerName", getPlayerName(playerId));
 			
@@ -398,8 +398,8 @@ modded class SCR_BaseGameMode
 		if (log && flabbyLogger)
 		{
 			// Add playerId to log
-			log.add("playerId", playerId);
 			log.add("function", "AuditFailed");
+			log.add("playerId", playerId);
 			log.add("playerBiId", getPlayerBohemiaId(playerId));
 			log.add("playerName", getPlayerName(playerId));
 			
@@ -422,8 +422,8 @@ modded class SCR_BaseGameMode
 		if (log && flabbyLogger)
 		{
 			// Add playerId to log
-			log.add("playerId", playerId);
 			log.add("function", "AuditRevived");
+			log.add("playerId", playerId);
 			log.add("playerBiId", getPlayerBohemiaId(playerId));
 			log.add("playerName", getPlayerName(playerId));
 			
@@ -446,8 +446,8 @@ modded class SCR_BaseGameMode
 		if (log && flabbyLogger)
 		{
 			// Add playerId to log
-			log.add("playerId", playerId);
 			log.add("function", "AuditTimeouted");
+			log.add("playerId", playerId);
 			log.add("playerBiId", getPlayerBohemiaId(playerId));
 			log.add("playerName", getPlayerName(playerId));
 			
@@ -470,8 +470,8 @@ modded class SCR_BaseGameMode
 		if (log && flabbyLogger)
 		{
 			// Add playerId to log
-			log.add("playerId", playerId);
 			log.add("function", "Registered");
+			log.add("playerId", playerId);
 			log.add("playerBiId", getPlayerBohemiaId(playerId));
 			log.add("playerName", getPlayerName(playerId));
 			
@@ -496,8 +496,8 @@ modded class SCR_BaseGameMode
 		if (log && flabbyLogger)
 		{
 			// Add playerId to log
-			log.add("playerId", playerId);
 			log.add("function", "PlayerConnected");
+			log.add("playerId", playerId);
 			log.add("playerBiId", getPlayerBohemiaId(playerId));
 			log.add("playerName", getPlayerName(playerId));
 			
