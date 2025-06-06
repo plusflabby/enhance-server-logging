@@ -44,7 +44,7 @@ void flabby_log_webhook_creation()
 }
 
 // Sending out webhooks
-void flabby_log_webhook_send(flabby_log_output_extension extension, flabby_log_output_format format, flabby_log_output_category category, flabby_log log)
+void flabby_log_webhook_send(flabby_log_output_extension extension, flabby_log_output_format format, flabby_log_output_category category, notnull flabby_log log)
 {
 	switch (log.logId)
 	{
@@ -105,7 +105,10 @@ void flabby_log_webhook_send(flabby_log_output_extension extension, flabby_log_o
 	return;
 }
 
-void GetWebookAndSendJson(string configJsonKey, flabby_log log)
+// Global rest callback for webhooks
+ref flabby_RestCallback flabby_webhookCallback = new flabby_RestCallback;
+
+void GetWebookAndSendJson(string configJsonKey, notnull flabby_log log)
 {
 	string webhook_value = string.Empty;
 	flabby_logger_update.getValueInFile(configJsonKey, webhook_value);
@@ -114,9 +117,20 @@ void GetWebookAndSendJson(string configJsonKey, flabby_log log)
 		// Send http post to webhook_value
 		string LogToSend = string.Empty;
 		log.build(LogToSend, flabby_log_output_extension.JSON);
+		if (LogToSend.IsEmpty())
+		{
+			PrintFormat("GetWebookAndSendJson trying to send empty body. configJsonKey=%1", configJsonKey, level:LogLevel.WARNING);
+			return;
+		}
 		RestContext rc = GetGame().GetRestApi().GetContext(webhook_value);
 		rc.SetHeaders("Content-Type,application/json");
-		rc.POST(null, string.Empty, LogToSend);
+		rc.POST(flabby_webhookCallback, "", LogToSend);
+		return;
+	}
+	
+	if (configJsonKey != "webhooks_all")
+	{
+		GetWebookAndSendJson("webhooks_all", log);
 	}
 }
 
@@ -131,3 +145,19 @@ void flabby_setWebhook()
 	GetGame().GetCallqueue().CallLater(flabby_setWebhook, 1000, false); // 1s
 }
 
+
+class flabby_RestCallback: RestCallback
+{
+	//------------------------------------------------------------------------------------------------
+    override void OnError(int errorCode)
+    {
+        Print("A webhook has failed with error code = " + errorCode.ToString(), LogLevel.WARNING);
+		
+    };
+ 
+	//------------------------------------------------------------------------------------------------
+    override void OnTimeout()
+    {
+        Print("A webhook has timed out", LogLevel.WARNING);	
+    };
+}; 
