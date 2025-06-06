@@ -138,7 +138,7 @@ void flabby_setWebhook()
 {
 	if (flabbyLogger)
 	{
-		flabby_logger.Event_OnLogStored.Insert(flabby_log_webhook_send);
+		flabbyLogger.Event_OnLogStored.Insert(flabby_log_webhook_send);
 		return;
 	}
 	

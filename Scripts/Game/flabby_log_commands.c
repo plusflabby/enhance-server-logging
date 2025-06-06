@@ -127,7 +127,8 @@ class flabby_log_cmd_config : flabby_log_command
 					flabbyLogger.writer(log);
 					return ScrServerCmdResult("Success, test log printed and stored.", EServerCmdResultType.OK);
 				}
-				else{
+				else
+				{
 					return ScrServerCmdResult("Failed, make sure server is running with or without the peertool plugin.", EServerCmdResultType.ERR);
 				}
 			}
@@ -211,6 +212,22 @@ class flabby_log_cmd_config : flabby_log_command
 						flabby_logger_update.addKeyToFile("flabby_log_output_server_console", "FALSE");
 						flabbyLogger.printLog = false;
 						return ScrServerCmdResult(string.Format("Success, updated to FALSE"), EServerCmdResultType.OK);
+					}
+					break;
+				}
+				case "file":
+				{
+					if (argThree == "TRUE")
+					{
+						flabby_logger_update.addKeyToFile("flabby_log_output_to_file", "TRUE");
+						flabbyLogger.fileLog = true;
+						return ScrServerCmdResult(string.Format("Success, updated file output to TRUE"), EServerCmdResultType.OK);
+					}
+					if (argThree == "FALSE")
+					{
+						flabby_logger_update.addKeyToFile("flabby_log_output_to_file", "FALSE");
+						flabbyLogger.fileLog = false;
+						return ScrServerCmdResult(string.Format("Success, updated file output to FALSE"), EServerCmdResultType.OK);
 					}
 					break;
 				}

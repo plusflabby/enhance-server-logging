@@ -229,6 +229,7 @@ class flabby_logger
 	flabby_log_output_category category = flabby_log_output_category.ALL;
 	bool printLog = true;
 	string serverName = string.Empty;
+	bool fileLog = true; // write log files
 	
 	//! constructor
 	void flabby_logger()
@@ -265,6 +266,13 @@ class flabby_logger
 		}
 		if (printerLogCfg == "TRUE") printLog = true;
 		else printLog = false;
+		string writerLogCfg = "TRUE";
+		if (jsonLoader.ReadValue("flabby_log_output_to_file", writerLogCfg) == false)
+		{
+			flabby_logger_update.addKeyToFile("flabby_log_output_to_file", "TRUE");
+		}
+		if (writerLogCfg == "TRUE") fileLog = true;
+		else fileLog = false;
 		
 		// Webhooks configuration
 		bool webhooks_config = flabby_log_webhook_setup();
@@ -277,23 +285,27 @@ class flabby_logger
 	//! Prints the log
 	void printer(notnull flabby_log log)
 	{
+		if (printLog == false) return;
+		
 		log.add("ServerName", serverName);
 		
 		string logStr = log.AsString();
 		if (logStr.IsEmpty() == false)
 		{
-			if (printLog)
-			{
-				Print(string.Format("%1 [ %2 ]", printPrefix, logStr), LogLevel.NORMAL);
-			}
+			Print(string.Format("%1 [ %2 ]", printPrefix, logStr), LogLevel.NORMAL);
 		}
 	}
 	
 	//! Stores the log in server's profile
 	bool writer(notnull flabby_log log)
 	{
+		// Add server name 
+		log.add("ServerName", serverName);
+		
 		// Invoke Listened Events
 		Event_OnLogStored.Invoke(extension, format, category, log);
+		
+		if (fileLog == false) return false;
 		
 		// Get dates
 		int year, month, day, hour, minute, second;
@@ -305,7 +317,6 @@ class flabby_logger
 		FileIO.MakeDirectory(string.Format("$profile:/flabby/%1/%2", year, month));
 		FileIO.MakeDirectory(string.Format("$profile:/flabby/%1/%2/%3", year, month, day));
 		
-		log.add("ServerName", serverName);
 		
 		// Data to store in file
 		string data = string.Empty;
