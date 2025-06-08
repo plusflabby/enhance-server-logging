@@ -58,15 +58,11 @@ modded class SCR_BaseGameMode
 			// Add data 
 			log.add("function", "ControllableDeleted");
 			log.add("m_OnControllableDeleted", "true");
-			log.add("playerBiId", getPlayerBohemiaId(playerId));
-			log.add("playerName", getPlayerName(playerId));
-			
-			Faction faction = GetEntityFaction(playerId);
-			if (faction) log.add("playerFaction", GetEntityFaction(playerId).GetFactionName());
-			else log.add("playerFaction", "UNKNOWN");
+			log.add("playerBiId", flabby_logger.getPlayerBohemiaId(playerId));
+			log.add("playerName", flabby_logger.getPlayerName(playerId));
+			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
 			
 			log.setDebugTime();
-			log.category = flabby_log_output_category.DEBUG;
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -91,7 +87,6 @@ modded class SCR_BaseGameMode
 			log.add("flabby_OnGameModeEnd", "true");
 			log.add("GetEndReason", endData.GetEndReason().ToString());
 			log.setDebugTime();
-			log.category = flabby_log_output_category.INFO;
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -109,7 +104,6 @@ modded class SCR_BaseGameMode
 			log.add("function", "ControllableSpawned");
 			log.add("m_OnWorldPostProcess", "true");
 			log.setDebugTime();
-			log.category = flabby_log_output_category.DEBUG;
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -126,7 +120,6 @@ modded class SCR_BaseGameMode
 			log.add("function", "WorldPostProcess");
 			log.add("m_OnWorldPostProcess", "true");
 			log.setDebugTime();
-			log.category = flabby_log_output_category.DEBUG;
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -144,15 +137,11 @@ modded class SCR_BaseGameMode
 			log.add("function", "PlayerDeleted");
 			log.add("playerId", playerId.ToString());
 			log.add("playerOrigin", player.GetOrigin().ToString(true));
-			log.add("playerBiId", getPlayerBohemiaId(playerId));
-			log.add("playerName", getPlayerName(playerId));
-			
-			Faction faction = GetEntityFaction(playerId);
-			if (faction) log.add("playerFaction", faction.GetFactionName());
-			else log.add("playerFaction", "UNKNOWN");
+			log.add("playerBiId", flabby_logger.getPlayerBohemiaId(playerId));
+			log.add("playerName", flabby_logger.getPlayerName(playerId));
+			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
 			
 			log.setDebugTime();
-			log.category = flabby_log_output_category.DEBUG;
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -169,15 +158,11 @@ modded class SCR_BaseGameMode
 			log.add("function", "PlayerRoleChange");
 			log.add("playerId", playerId.ToString());
 			log.add("newRole", SCR_Enum.GetEnumName(EPlayerRole, roleFlags));
-			log.add("playerBiId", getPlayerBohemiaId(playerId));
-			log.add("playerName", getPlayerName(playerId));
-			
-			Faction faction = GetEntityFaction(playerId);
-			if (faction) log.add("playerFaction", faction.GetFactionName());
-			else log.add("playerFaction", "UNKNOWN");
+			log.add("playerBiId", flabby_logger.getPlayerBohemiaId(playerId));
+			log.add("playerName", flabby_logger.getPlayerName(playerId));
+			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
 			
 			log.setDebugTime();
-			log.category = flabby_log_output_category.INFO;
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -195,7 +180,6 @@ modded class SCR_BaseGameMode
 			log.add("function", "GameEnd");
 			log.add("m_OnGameEnd", "true");
 			log.setDebugTime();
-			log.category = flabby_log_output_category.INFO;
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -212,7 +196,6 @@ modded class SCR_BaseGameMode
 			log.add("function", "GameStart");
 			log.add("Event_OnGameStart", "true");
 			log.setDebugTime();
-			log.category = flabby_log_output_category.INFO;
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -231,7 +214,6 @@ modded class SCR_BaseGameMode
 			log.add("GetVictimPlayerID", instigatorContextData.GetVictimPlayerID().ToString());
 			log.add("GetKillerPlayerID", instigatorContextData.GetKillerPlayerID().ToString());
 			log.setDebugTime();
-			log.category = flabby_log_output_category.DEBUG;
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -247,16 +229,13 @@ modded class SCR_BaseGameMode
 			// Add playerId to log
 			log.add("function", "PlayerKilled");
 			log.add("VictimPlayerID", instigatorContextData.GetVictimPlayerID().ToString());
-			log.add("VictimPlayerBiId", getPlayerBohemiaId(instigatorContextData.GetVictimPlayerID()));
-			log.add("VictimPlayerName", getPlayerName(instigatorContextData.GetVictimPlayerID()));
-			
-			Faction faction = GetEntityFaction(instigatorContextData.GetVictimPlayerID());
-			if (faction) log.add("VictimPlayerFaction", faction.GetFactionName());
-			else log.add("VictimPlayerFaction", "UNKNOWN");
+			log.add("VictimPlayerBiId", flabby_logger.getPlayerBohemiaId(instigatorContextData.GetVictimPlayerID()));
+			log.add("VictimPlayerName", flabby_logger.getPlayerName(instigatorContextData.GetVictimPlayerID()));
+			log.add("VictimPlayerFaction", flabby_logger.getPlayerFaction(instigatorContextData.GetVictimPlayerID()));
 			
 			log.add("KillerPlayerID", instigatorContextData.GetKillerPlayerID().ToString());
-			log.add("KillerPlayerBiId", getPlayerBohemiaId(instigatorContextData.GetKillerPlayerID()));
-			log.add("KillerPlayerName", getPlayerName(instigatorContextData.GetKillerPlayerID()));
+			log.add("KillerPlayerBiId", flabby_logger.getPlayerBohemiaId(instigatorContextData.GetKillerPlayerID()));
+			log.add("KillerPlayerName", flabby_logger.getPlayerName(instigatorContextData.GetKillerPlayerID()));
 			
 			
 			log.add("VictimKillerRelation", SCR_Enum.GetEnumName(SCR_ECharacterDeathStatusRelations, instigatorContextData.GetVictimKillerRelation()));
@@ -272,13 +251,9 @@ modded class SCR_BaseGameMode
 					log.add("KillerPlayerWeaponName", currentSlot.GetUIInfo().GetName());
 				}
 			}
-			
-			Faction faction2 = GetEntityFaction(instigatorContextData.GetKillerPlayerID());
-			if (faction2) log.add("KillerPlayerFaction", faction2.GetFactionName());
-			else log.add("KillerPlayerFaction", "UNKNOWN");
+			log.add("KillerPlayerFaction", flabby_logger.getPlayerFaction(instigatorContextData.GetKillerPlayerID()));
 			
 			log.setDebugTime();
-			log.category = flabby_log_output_category.INFO;
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -296,15 +271,11 @@ modded class SCR_BaseGameMode
 			log.add("function", "PlayerSpawned");
 			log.add("playerId", playerId);
 			log.add("playerOrigin", player.GetOrigin().ToString(true));
-			log.add("playerBiId", getPlayerBohemiaId(playerId));
-			log.add("playerName", getPlayerName(playerId));
-			
-			Faction faction = GetEntityFaction(playerId);
-			if (faction) log.add("playerFaction", faction.GetFactionName());
-			else log.add("playerFaction", "UNKNOWN");
+			log.add("playerBiId", flabby_logger.getPlayerBohemiaId(playerId));
+			log.add("playerName", flabby_logger.getPlayerName(playerId));
+			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
 			
 			log.setDebugTime();
-			log.category = flabby_log_output_category.DEBUG;
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -324,15 +295,11 @@ modded class SCR_BaseGameMode
 			log.add("playerId", playerId);
 			log.add("cause", KickCauseCode.NONE.ToString());
 			log.add("timeout", timeout);
-			log.add("playerBiId", getPlayerBohemiaId(playerId));
-			log.add("playerName", getPlayerName(playerId));
-			
-			Faction faction = GetEntityFaction(playerId);
-			if (faction) log.add("playerFaction", faction.GetFactionName());
-			else log.add("playerFaction", "UNKNOWN");
+			log.add("playerBiId", flabby_logger.getPlayerBohemiaId(playerId));
+			log.add("playerName", flabby_logger.getPlayerName(playerId));
+			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
 			
 			log.setDebugTime();
-			log.category = flabby_log_output_category.INFO;
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -350,15 +317,11 @@ modded class SCR_BaseGameMode
 			log.add("playerId", playerId);
 			log.add("cause", KickCauseCode.NONE.ToString());
 			log.add("timeout", timeout);
-			log.add("playerName", getPlayerName(playerId));
-			log.add("playerBiId", getPlayerBohemiaId(playerId));
-			
-			Faction faction = GetEntityFaction(playerId);
-			if (faction) log.add("playerFaction", faction.GetFactionName());
-			else log.add("playerFaction", "UNKNOWN");
+			log.add("playerName", flabby_logger.getPlayerName(playerId));
+			log.add("playerBiId", flabby_logger.getPlayerBohemiaId(playerId));
+			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
 			
 			log.setDebugTime();
-			log.category = flabby_log_output_category.DEBUG;
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -376,15 +339,11 @@ modded class SCR_BaseGameMode
 			// Add playerId to log
 			log.add("function", "AuditSuccess");
 			log.add("playerId", playerId);
-			log.add("playerBiId", getPlayerBohemiaId(playerId));
-			log.add("playerName", getPlayerName(playerId));
-			
-			Faction faction = GetEntityFaction(playerId);
-			if (faction) log.add("playerFaction", faction.GetFactionName());
-			else log.add("playerFaction", "UNKNOWN");
+			log.add("playerBiId", flabby_logger.getPlayerBohemiaId(playerId));
+			log.add("playerName", flabby_logger.getPlayerName(playerId));
+			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
 			
 			log.setDebugTime();
-			log.category = flabby_log_output_category.INFO;
 			// Print and store log
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			flabbyLogger.printer(log);
@@ -400,15 +359,11 @@ modded class SCR_BaseGameMode
 			// Add playerId to log
 			log.add("function", "AuditFailed");
 			log.add("playerId", playerId);
-			log.add("playerBiId", getPlayerBohemiaId(playerId));
-			log.add("playerName", getPlayerName(playerId));
-			
-			Faction faction = GetEntityFaction(playerId);
-			if (faction) log.add("playerFaction", faction.GetFactionName());
-			else log.add("playerFaction", "UNKNOWN");
+			log.add("playerBiId", flabby_logger.getPlayerBohemiaId(playerId));
+			log.add("playerName", flabby_logger.getPlayerName(playerId));
+			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
 			
 			log.setDebugTime();
-			log.category = flabby_log_output_category.DEBUG;
 			// Print and store log
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			flabbyLogger.printer(log);
@@ -424,15 +379,11 @@ modded class SCR_BaseGameMode
 			// Add playerId to log
 			log.add("function", "AuditRevived");
 			log.add("playerId", playerId);
-			log.add("playerBiId", getPlayerBohemiaId(playerId));
-			log.add("playerName", getPlayerName(playerId));
-			
-			Faction faction = GetEntityFaction(playerId);
-			if (faction) log.add("playerFaction", faction.GetFactionName());
-			else log.add("playerFaction", "UNKNOWN");
+			log.add("playerBiId", flabby_logger.getPlayerBohemiaId(playerId));
+			log.add("playerName", flabby_logger.getPlayerName(playerId));
+			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
 			
 			log.setDebugTime();
-			log.category = flabby_log_output_category.DEBUG;
 			// Print and store log
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			flabbyLogger.printer(log);
@@ -448,15 +399,11 @@ modded class SCR_BaseGameMode
 			// Add playerId to log
 			log.add("function", "AuditTimeouted");
 			log.add("playerId", playerId);
-			log.add("playerBiId", getPlayerBohemiaId(playerId));
-			log.add("playerName", getPlayerName(playerId));
-			
-			Faction faction = GetEntityFaction(playerId);
-			if (faction) log.add("playerFaction", faction.GetFactionName());
-			else log.add("playerFaction", "UNKNOWN");
+			log.add("playerBiId", flabby_logger.getPlayerBohemiaId(playerId));
+			log.add("playerName", flabby_logger.getPlayerName(playerId));
+			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
 			
 			log.setDebugTime();
-			log.category = flabby_log_output_category.DEBUG;
 			// Print and store log
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			flabbyLogger.printer(log);
@@ -472,15 +419,11 @@ modded class SCR_BaseGameMode
 			// Add playerId to log
 			log.add("function", "Registered");
 			log.add("playerId", playerId);
-			log.add("playerBiId", getPlayerBohemiaId(playerId));
-			log.add("playerName", getPlayerName(playerId));
-			
-			Faction faction = GetEntityFaction(playerId);
-			if (faction) log.add("playerFaction", faction.GetFactionName());
-			else log.add("playerFaction", "UNKNOWN");
+			log.add("playerBiId", flabby_logger.getPlayerBohemiaId(playerId));
+			log.add("playerName", flabby_logger.getPlayerName(playerId));
+			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
 			
 			log.setDebugTime();
-			log.category = flabby_log_output_category.DEBUG;
 			// Print and store log
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			flabbyLogger.printer(log);
@@ -498,14 +441,10 @@ modded class SCR_BaseGameMode
 			// Add playerId to log
 			log.add("function", "PlayerConnected");
 			log.add("playerId", playerId);
-			log.add("playerBiId", getPlayerBohemiaId(playerId));
-			log.add("playerName", getPlayerName(playerId));
+			log.add("playerBiId", flabby_logger.getPlayerBohemiaId(playerId));
+			log.add("playerName", flabby_logger.getPlayerName(playerId));
+			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
 			
-			Faction faction = GetEntityFaction(playerId);
-			if (faction) log.add("playerFaction", faction.GetFactionName());
-			else log.add("playerFaction", "UNKNOWN");
-			
-			log.category = flabby_log_output_category.ALL;
 			log.setDebugTime();
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			log.fileToStoreData.Insert(flabby_log_output_file.INFO);
@@ -514,75 +453,6 @@ modded class SCR_BaseGameMode
 			flabbyLogger.printer(log);
 			flabbyLogger.writer(log);
 		}
-	}
-	
-	protected string getPlayerName(int playerGameId)
-	{
-		flabby_identifier id = flabbyIdentifier.Get(playerGameId);
-		if (!id)
-		{
-			PlayerManager pm = GetGame().GetPlayerManager();
-			if (!pm)
-			{
-				return string.Format("Error with PlayerManager", playerGameId);
-			}
-			
-			return pm.GetPlayerName(playerGameId);
-		}
-		else
-		{
-			return id.name;
-		}
-	}
-	
-	protected string getPlayerBohemiaId(int playerGameId)
-	{
-		flabby_identifier id = flabbyIdentifier.Get(playerGameId);
-		if (!id)
-		{
-			BackendApi be = GetGame().GetBackendApi();
-			if (!be)
-			{
-				return string.Format("Error with PlayerManager or BackendApi", playerGameId);
-			}
-			
-			return be.GetPlayerIdentityId(playerGameId);
-		}
-		else
-		{
-			return id.bohemia;
-		}
-	}
-	
-	protected Faction GetEntityFaction(int playerId)
-	{
-		// Get Player IEntity
-		PlayerManager PM = GetGame().GetPlayerManager();
-		if (!PM)
-			return null;
-		
-		IEntity ent = PM.GetPlayerControlledEntity(playerId);
-		if (!ent)
-			return null;
-		
-		FactionAffiliationComponent factionComp = FactionAffiliationComponent.Cast(ent.FindComponent(FactionAffiliationComponent));
-
-		// Seacrch for the faction component on parent entities as not always is it on the same component as this one (vehicle for an example)
-		while (!factionComp && ent)
-		{
-			ent = ent.GetParent();
-			if (ent)
-				factionComp = FactionAffiliationComponent.Cast(ent.FindComponent(FactionAffiliationComponent));
-		}
-
-		if (!factionComp)
-			return null;
-
-		Faction faction = factionComp.GetAffiliatedFaction();
-		if (!faction)
-			faction = factionComp.GetDefaultAffiliatedFaction();
-
-		return faction;
 	}
 }
 

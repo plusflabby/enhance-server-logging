@@ -18,14 +18,6 @@ class flabby_logger_update
 		// Update on global variable
 		if (flabbyLogger) flabbyLogger.extension = extension;
 	}
-	//! set default or new category
-	static void updateCategory(flabby_log_output_category category = flabby_log_output_category.INFO)
-	{
-		addKeyToFile("flabby_log_output_category", category.ToString());
-		
-		// Update on global variable
-		if (flabbyLogger) flabbyLogger.category = category;
-	}
 	
 	//! get format
 	static void getFormat(out flabby_log_output_format format)
@@ -41,14 +33,6 @@ class flabby_logger_update
 		auto rtnVar = extension;
 		string OutValue = string.Empty;
 		getValueInFile("flabby_log_output_extension", OutValue);
-		rtnVar = OutValue.ToInt();
-	}
-	//! get category
-	static void getCategory(out flabby_log_output_category category)
-	{
-		auto rtnVar = category;
-		string OutValue = string.Empty;
-		getValueInFile("flabby_log_output_category", OutValue);
 		rtnVar = OutValue.ToInt();
 	}
 	//! get webhook (webhook_event ex. == ALL)

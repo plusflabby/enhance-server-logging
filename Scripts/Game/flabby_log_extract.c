@@ -113,11 +113,10 @@ modded class SCR_BaseGameMode
 			log.add("machineName", machineName);
 			log.add("IP", IP);
 			log.add("addons", addons.ToString());
-			log.add("playerBiId", getPlayerBohemiaId(playerId));
-			log.add("playerName", getPlayerName(playerId));
+			log.add("playerBiId", flabby_logger.getPlayerBohemiaId(playerId));
+			log.add("playerName", flabby_logger.getPlayerName(playerId));
 			
 			log.setDebugTime();
-			log.category = flabby_log_output_category.INFO;
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			log.fileToStoreData.Insert(flabby_log_output_file.PLAYERS);
 			// Print and store log

@@ -226,7 +226,7 @@ class flabby_logger
 	// Cfg variables
 	flabby_log_output_extension extension = flabby_log_output_extension.JSON;
 	flabby_log_output_format format = flabby_log_output_format.RICH;
-	flabby_log_output_category category = flabby_log_output_category.ALL;
+	flabby_log_output_category category = flabby_log_output_category.ALL; // NOT USED
 	bool printLog = true;
 	string serverName = string.Empty;
 	bool fileLog = true; // write log files
@@ -243,7 +243,6 @@ class flabby_logger
 			// Since the file does not exist set default values
 			flabby_logger_update.updateExtension(flabby_log_output_extension.JSON);
 			flabby_logger_update.updateFormat(flabby_log_output_format.RICH);
-			flabby_logger_update.updateCategory(flabby_log_output_category.ALL);
 			flabby_logger_update.addKeyToFile("flabby_log_output_server_console", "TRUE");
 			flabby_logger_update.addKeyToFile("flabby_log_output_server_name", "EXAMPLE SERVER NAME");
 		}
@@ -253,7 +252,6 @@ class flabby_logger
 		jsonLoader.LoadFromFile("$profile:/flabby/enhanced-logging.json");
 		jsonLoader.ReadValue("flabby_log_output_extension", extension);
 		jsonLoader.ReadValue("flabby_log_output_format", format);
-		jsonLoader.ReadValue("flabby_log_output_category", category);
 		if (jsonLoader.ReadValue("flabby_log_output_server_name", serverName) == false)
 		{
 			flabby_logger_update.addKeyToFile("flabby_log_output_server_name", "EXAMPLE SERVER NAME");
@@ -422,5 +420,78 @@ class flabby_logger
 		}
 		
 		return true;
+	}
+	
+	
+	
+	
+	// Static
+	static string getPlayerName(int playerGameId)
+	{
+		if (flabbyIdentifier)
+		{
+			flabby_identifier id = flabbyIdentifier.Get(playerGameId);
+			if (id)
+			{
+				return id.name;
+			}
+		}
+		
+		ArmaReforgerScripted game = GetGame();
+		if (!game) return "Error with GetGame()";
+		PlayerManager pm = game.GetPlayerManager();
+		if (!pm) return "Error with PlayerManager";
+		return pm.GetPlayerName(playerGameId);
+	}
+	static string getPlayerBohemiaId(int playerGameId)
+	{
+		if (flabbyIdentifier)
+		{
+			flabby_identifier id = flabbyIdentifier.Get(playerGameId);
+			if (id)
+			{
+				return id.bohemia;
+			}
+		}
+		
+		ArmaReforgerScripted game = GetGame();
+		if (!game) return "Error with GetGame()";
+		BackendApi be = game.GetBackendApi();
+		if (!be) return "Error with BackendApi";
+		return be.GetPlayerIdentityId(playerGameId);
+	}
+	static string getPlayerFaction(int playerGameId)
+	{
+		ArmaReforgerScripted game = GetGame();
+		if (!game)
+			return "UNKNOWN";
+		
+		// Get Player IEntity
+		PlayerManager PM = game.GetPlayerManager();
+		if (!PM)
+			return "UNKNOWN";
+		
+		IEntity ent = PM.GetPlayerControlledEntity(playerGameId);
+		if (!ent)
+			return "UNKNOWN";
+		
+		FactionAffiliationComponent factionComp = FactionAffiliationComponent.Cast(ent.FindComponent(FactionAffiliationComponent));
+
+		// Search for the faction component on parent entities as not always is it on the same component as this one (vehicle for an example)
+		while (!factionComp && ent)
+		{
+			ent = ent.GetParent();
+			if (ent)
+				factionComp = FactionAffiliationComponent.Cast(ent.FindComponent(FactionAffiliationComponent));
+		}
+
+		if (!factionComp)
+			return "UNKNOWN";
+
+		Faction faction = factionComp.GetAffiliatedFaction();
+		if (!faction)
+			faction = factionComp.GetDefaultAffiliatedFaction();
+
+		return faction.GetFactionName();
 	}
 }

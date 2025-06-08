@@ -85,10 +85,6 @@ class flabby_log_cmd_help : flabby_log_command
 		helpString += "#log format COMPACT - Just the essential data of a log\n";
 		helpString += "#log format NORMAL - COMPACT format just with time(s)\n";
 		helpString += "#log format RICH - NORMAL format but with extra, possible, useful data\n\n";
-		helpString += "Examples of updating log category,\n";
-		helpString += "#log category DEBUG - A file for each class method\n";
-		helpString += "#log category INFO - Files for each group\n";
-		helpString += "#log category ALL - All data in one file\n\n";
 		helpString += "Examples of updating log extensions,\n";
 		helpString += "#log extension JSON - File(s) will be .json\n";
 		helpString += "#log extension LOG - File(s) will in .log\n";;
@@ -159,25 +155,6 @@ class flabby_log_cmd_config : flabby_log_command
 						return ScrServerCmdResult(string.Format("Success, updated format to COMPACT"), EServerCmdResultType.OK);
 					}
 					
-					break;
-				}
-				case "category":
-				{
-					if (argThree == "INFO")
-					{
-						flabby_logger_update.updateCategory(flabby_log_output_category.INFO);
-						return ScrServerCmdResult(string.Format("Success, updated category to INFO"), EServerCmdResultType.OK);
-					}
-					if (argThree == "ALL")
-					{
-						flabby_logger_update.updateCategory(flabby_log_output_category.ALL);
-						return ScrServerCmdResult(string.Format("Success, updated category to ALL"), EServerCmdResultType.OK);
-					}
-					if (argThree == "DEBUG")
-					{
-						flabby_logger_update.updateCategory(flabby_log_output_category.DEBUG);
-						return ScrServerCmdResult(string.Format("Success, updated category to DEBUG"), EServerCmdResultType.OK);
-					}
 					break;
 				}
 				case "extension":
