@@ -17,7 +17,6 @@ modded class SCR_ChatComponent
 			// Sender Faction
 			log.add("senderFaction", flabby_logger.getPlayerFaction(senderId));
 			
-			log.setDebugTime();
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			log.fileToStoreData.Insert(flabby_log_output_file.CHAT);
 			// Print and store log
@@ -57,7 +56,6 @@ modded class SCR_ChatComponent
 			// Sender Faction
 			log.add("senderFaction", flabby_logger.getPlayerFaction(senderId));
 			
-			log.setDebugTime();
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			log.fileToStoreData.Insert(flabby_log_output_file.CHAT);
 			// Print and store log

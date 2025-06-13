@@ -62,7 +62,6 @@ modded class SCR_BaseGameMode
 			log.add("playerName", flabby_logger.getPlayerName(playerId));
 			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
 			
-			log.setDebugTime();
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -86,7 +85,6 @@ modded class SCR_BaseGameMode
 			log.add("function", "GameModeEnd");
 			log.add("flabby_OnGameModeEnd", "true");
 			log.add("GetEndReason", endData.GetEndReason().ToString());
-			log.setDebugTime();
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -103,7 +101,6 @@ modded class SCR_BaseGameMode
 			// Add data 
 			log.add("function", "ControllableSpawned");
 			log.add("m_OnWorldPostProcess", "true");
-			log.setDebugTime();
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -119,7 +116,6 @@ modded class SCR_BaseGameMode
 			// Add data 
 			log.add("function", "WorldPostProcess");
 			log.add("m_OnWorldPostProcess", "true");
-			log.setDebugTime();
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -141,7 +137,6 @@ modded class SCR_BaseGameMode
 			log.add("playerName", flabby_logger.getPlayerName(playerId));
 			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
 			
-			log.setDebugTime();
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -162,7 +157,6 @@ modded class SCR_BaseGameMode
 			log.add("playerName", flabby_logger.getPlayerName(playerId));
 			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
 			
-			log.setDebugTime();
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -179,7 +173,6 @@ modded class SCR_BaseGameMode
 			// Add playerId to log
 			log.add("function", "GameEnd");
 			log.add("m_OnGameEnd", "true");
-			log.setDebugTime();
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -195,7 +188,6 @@ modded class SCR_BaseGameMode
 			// Add playerId to log
 			log.add("function", "GameStart");
 			log.add("Event_OnGameStart", "true");
-			log.setDebugTime();
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -213,7 +205,6 @@ modded class SCR_BaseGameMode
 			log.add("function", "ControllableDestroyed");
 			log.add("GetVictimPlayerID", instigatorContextData.GetVictimPlayerID().ToString());
 			log.add("GetKillerPlayerID", instigatorContextData.GetKillerPlayerID().ToString());
-			log.setDebugTime();
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -253,7 +244,6 @@ modded class SCR_BaseGameMode
 			}
 			log.add("KillerPlayerFaction", flabby_logger.getPlayerFaction(instigatorContextData.GetKillerPlayerID()));
 			
-			log.setDebugTime();
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -275,7 +265,6 @@ modded class SCR_BaseGameMode
 			log.add("playerName", flabby_logger.getPlayerName(playerId));
 			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
 			
-			log.setDebugTime();
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -299,7 +288,6 @@ modded class SCR_BaseGameMode
 			log.add("playerName", flabby_logger.getPlayerName(playerId));
 			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
 			
-			log.setDebugTime();
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -321,7 +309,6 @@ modded class SCR_BaseGameMode
 			log.add("playerBiId", flabby_logger.getPlayerBohemiaId(playerId));
 			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
 			
-			log.setDebugTime();
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -343,7 +330,6 @@ modded class SCR_BaseGameMode
 			log.add("playerName", flabby_logger.getPlayerName(playerId));
 			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
 			
-			log.setDebugTime();
 			// Print and store log
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			flabbyLogger.printer(log);
@@ -363,7 +349,6 @@ modded class SCR_BaseGameMode
 			log.add("playerName", flabby_logger.getPlayerName(playerId));
 			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
 			
-			log.setDebugTime();
 			// Print and store log
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			flabbyLogger.printer(log);
@@ -383,7 +368,6 @@ modded class SCR_BaseGameMode
 			log.add("playerName", flabby_logger.getPlayerName(playerId));
 			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
 			
-			log.setDebugTime();
 			// Print and store log
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			flabbyLogger.printer(log);
@@ -403,7 +387,6 @@ modded class SCR_BaseGameMode
 			log.add("playerName", flabby_logger.getPlayerName(playerId));
 			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
 			
-			log.setDebugTime();
 			// Print and store log
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			flabbyLogger.printer(log);
@@ -423,7 +406,6 @@ modded class SCR_BaseGameMode
 			log.add("playerName", flabby_logger.getPlayerName(playerId));
 			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
 			
-			log.setDebugTime();
 			// Print and store log
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			flabbyLogger.printer(log);
@@ -445,7 +427,6 @@ modded class SCR_BaseGameMode
 			log.add("playerName", flabby_logger.getPlayerName(playerId));
 			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
 			
-			log.setDebugTime();
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			log.fileToStoreData.Insert(flabby_log_output_file.INFO);
 			log.fileToStoreData.Insert(flabby_log_output_file.PLAYERS);

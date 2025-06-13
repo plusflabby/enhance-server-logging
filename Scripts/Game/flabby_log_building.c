@@ -17,7 +17,6 @@ modded class SCR_CampaignBuildingNetworkComponent
 			log.add("playerBiId", flabby_logger.getPlayerBohemiaId(playerId));
 			log.add("playerName", flabby_logger.getPlayerName(playerId));
 			
-			log.setDebugTime();
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			log.fileToStoreData.Insert(flabby_log_output_file.WORLD);
 			// Print and store log

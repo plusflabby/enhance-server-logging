@@ -1,15 +1,6 @@
 //! Class for updating log configurations
 class flabby_logger_update
 {
-	//! set default or new format
-	static void updateFormat(flabby_log_output_format format = flabby_log_output_format.NORMAL)
-	{
-		addKeyToFile("flabby_log_output_format", format.ToString());
-		
-		// Update on global variable
-		if (flabbyLogger) flabbyLogger.format = format;
-	}
-	
 	//! set default or new extension
 	static void updateExtension(flabby_log_output_extension extension = flabby_log_output_extension.JSON)
 	{
@@ -19,14 +10,6 @@ class flabby_logger_update
 		if (flabbyLogger) flabbyLogger.extension = extension;
 	}
 	
-	//! get format
-	static void getFormat(out flabby_log_output_format format)
-	{
-		auto rtnVar = format;
-		string OutValue = string.Empty;
-		getValueInFile("flabby_log_output_format", OutValue);
-		rtnVar = OutValue.ToInt();
-	}
 	//! get extension
 	static void getExtension(out flabby_log_output_extension extension)
 	{

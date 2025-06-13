@@ -8,7 +8,7 @@ class flabby_data
 	string data;
 	flabby_log_output_format format;
 	
-	void flabby_data(string key_, string data_, flabby_log_output_format format_)
+	void flabby_data(string key_, string data_, flabby_log_output_format format_ = flabby_log_output_format.RICH)
 	{
 		key = key_;
 		data = data_;
@@ -60,18 +60,6 @@ class flabby_log
 		serverTimeSecondsFloat = Math.Round(GetGame().GetWorld().GetWorldTime()) / 1000;
 		serverTimeSecondsStr = serverTimeSecondsFloat.ToString();
 	}
-	map<string, ref flabby_data> getDebugTime()
-	{
-		ref map<string, ref flabby_data> info_ = new map<string, ref flabby_data>();
-		info_.Insert("systemTimeInt", new flabby_data("systemTimeInt", systemTimeInt.ToString(), flabby_log_output_format.NORMAL));
-		info_.Insert("serverTimeSecondsFloat", new flabby_data("systemTimeInt", serverTimeSecondsFloat.ToString(), flabby_log_output_format.NORMAL));
-		info_.Insert("systemTimeUTC", new flabby_data("systemTimeInt", systemTimeUTC, flabby_log_output_format.NORMAL));
-		info_.Insert("systemTimeStr", new flabby_data("systemTimeInt", systemTimeStr, flabby_log_output_format.NORMAL));
-		info_.Insert("serverTimeSecondsStr", new flabby_data("systemTimeInt", serverTimeSecondsStr, flabby_log_output_format.NORMAL));
-		
-		return info;
-		
-	}
 	// Add times to data(info var)
 	void addDebugTime()
 	{
@@ -85,12 +73,12 @@ class flabby_log
 	//! Add an informational string
 	bool add(string name, string input, flabby_log_output_format format_ = flabby_log_output_format.RICH)
 	{
-		return info.Insert(name, new flabby_data(name, input, format_));
+		return info.Insert(name, new flabby_data(name, input));
 	}
 	//! Add an informational int
 	bool add(string name, int input, flabby_log_output_format format_ = flabby_log_output_format.RICH)
 	{
-		return info.Insert(name, new flabby_data(name, input.ToString(), format_));
+		return info.Insert(name, new flabby_data(name, input.ToString()));
 	}
 	//! Add information
 	bool add(map<string, string> input, flabby_log_output_format format_ = flabby_log_output_format.RICH)
@@ -99,17 +87,14 @@ class flabby_log
 		{
 			string key = input.GetKey(i);
 			string value = input.GetElement(i);
-			info.Insert(key, new flabby_data(key, value, format_));
+			info.Insert(key, new flabby_data(key, value));
 		}
 		return true;
 	}
 	//! Build this class and output
 	void build(out string output, flabby_log_output_extension extension)
 	{
-		if (flabbyLogger.format >= flabby_log_output_format.NORMAL)
-		{
-			addDebugTime();
-		}
+		addDebugTime();
 		
 		if (extension == flabby_log_output_extension.TXT)
 		{
@@ -119,16 +104,13 @@ class flabby_log
 				string key = info.GetKey(i);
 				flabby_data value = info.GetElement(i);
 				
-				if (value.format >= flabbyLogger.format)
+				if (str.IsEmpty())
 				{
-					if (str.IsEmpty())
-					{
-						str += string.Format("%1: %2", key, value.data);
-					}
-					else 
-					{
-						str += string.Format(", %1: %2", key, value.data);
-					}
+					str += string.Format("%1: %2", key, value.data);
+				}
+				else 
+				{
+					str += string.Format(", %1: %2", key, value.data);
 				}
 			}
 			output = str;
@@ -142,16 +124,13 @@ class flabby_log
 				string key = info.GetKey(i);
 				flabby_data value = info.GetElement(i);
 				
-				if (value.format >= flabbyLogger.format)
+				if (str.IsEmpty())
 				{
-					if (str.IsEmpty())
-					{
-						str += string.Format("%1 = %2", key, value.data);
-					}
-					else 
-					{
-						str += string.Format(", %1 = %2", key, value.data);
-					}
+					str += string.Format("%1 = %2", key, value.data);
+				}
+				else 
+				{
+					str += string.Format(", %1 = %2", key, value.data);
 				}
 			}
 			output = str;
@@ -165,10 +144,7 @@ class flabby_log
 				string key = info.GetKey(i);
 				flabby_data value = info.GetElement(i);
 				
-				if (value.format >= flabbyLogger.format)
-				{
-					jsonSaver.WriteValue(key, value.data);
-				}
+				jsonSaver.WriteValue(key, value.data);
 			}
 			output = jsonSaver.ExportToString();
 			return;
@@ -182,32 +158,24 @@ class flabby_log
 	string AsString()
 	{
 		string infoStr = string.Empty;
-		
 		string rtnStr = string.Empty;
 		for (int i; i < info.Count(); i++)
 		{
 			string key = info.GetKey(i);
 			flabby_data value = info.GetElement(i);
-			if (value.format >= flabbyLogger.format)
+			if (infoStr.IsEmpty())
 			{
-				if (infoStr.IsEmpty())
-				{
-					infoStr += string.Format("%1=%2", key, value.data);
-				}
-				else
-				{
-					infoStr += string.Format(", %1='%2'", key, value.data);
-				}
+				infoStr += string.Format("%1=%2", key, value.data);
+			}
+			else
+			{
+				infoStr += string.Format(", %1='%2'", key, value.data);
 			}
 		}
 		rtnStr += infoStr;
-		
-		if (flabbyLogger.format >= flabby_log_output_format.NORMAL)
-		{
-			rtnStr += string.Format(", Data_ID='%1'", SCR_Enum.GetEnumName(flabby_log_identifier, logId));
-			rtnStr += string.Format(", Server_time='%1s'", Math.Round(serverTimeSecondsFloat));
-			rtnStr += string.Format(", System_time='%1s'", systemTimeStr);
-		}
+		rtnStr += string.Format(", Data_ID='%1'", SCR_Enum.GetEnumName(flabby_log_identifier, logId));
+		rtnStr += string.Format(", Server_time='%1s'", Math.Round(serverTimeSecondsFloat));
+		rtnStr += string.Format(", System_time='%1s'", systemTimeStr);
 		
 		return rtnStr;
 	}
@@ -242,7 +210,6 @@ class flabby_logger
 		{
 			// Since the file does not exist set default values
 			flabby_logger_update.updateExtension(flabby_log_output_extension.JSON);
-			flabby_logger_update.updateFormat(flabby_log_output_format.RICH);
 			flabby_logger_update.addKeyToFile("flabby_log_output_server_console", "TRUE");
 			flabby_logger_update.addKeyToFile("flabby_log_output_server_name", "EXAMPLE SERVER NAME");
 		}
@@ -251,7 +218,6 @@ class flabby_logger
 		SCR_JsonLoadContext jsonLoader = new SCR_JsonLoadContext();
 		jsonLoader.LoadFromFile("$profile:/flabby/enhanced-logging.json");
 		jsonLoader.ReadValue("flabby_log_output_extension", extension);
-		jsonLoader.ReadValue("flabby_log_output_format", format);
 		if (jsonLoader.ReadValue("flabby_log_output_server_name", serverName) == false)
 		{
 			flabby_logger_update.addKeyToFile("flabby_log_output_server_name", "EXAMPLE SERVER NAME");

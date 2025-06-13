@@ -81,10 +81,6 @@ class flabby_log_cmd_help : flabby_log_command
 	{
 		string helpString = string.Empty;
 		helpString += "#login Is required for before a command\n";
-		helpString += "Examples of updating log formatting,\n";
-		helpString += "#log format COMPACT - Just the essential data of a log\n";
-		helpString += "#log format NORMAL - COMPACT format just with time(s)\n";
-		helpString += "#log format RICH - NORMAL format but with extra, possible, useful data\n\n";
 		helpString += "Examples of updating log extensions,\n";
 		helpString += "#log extension JSON - File(s) will be .json\n";
 		helpString += "#log extension LOG - File(s) will in .log\n";;
@@ -117,7 +113,6 @@ class flabby_log_cmd_config : flabby_log_command
 				if (log && flabbyLogger)
 				{
 					log.add("test", "log");
-					log.setDebugTime();
 					// Print and store log
 					flabbyLogger.printer(log);
 					flabbyLogger.writer(log);
@@ -137,26 +132,6 @@ class flabby_log_cmd_config : flabby_log_command
 			argThree.ToUpper();
 			switch (argTwo)
 			{
-				case "format":
-				{
-					if (argThree == "NORMAL")
-					{
-						flabby_logger_update.updateFormat(flabby_log_output_format.NORMAL);
-						return ScrServerCmdResult(string.Format("Success, updated format to NORMAL"), EServerCmdResultType.OK);
-					}
-					if (argThree == "RICH")
-					{
-						flabby_logger_update.updateFormat(flabby_log_output_format.RICH);
-						return ScrServerCmdResult(string.Format("Success, updated format to RICH"), EServerCmdResultType.OK);
-					}
-					if (argThree == "COMPACT")
-					{
-						flabby_logger_update.updateFormat(flabby_log_output_format.COMPACT);
-						return ScrServerCmdResult(string.Format("Success, updated format to COMPACT"), EServerCmdResultType.OK);
-					}
-					
-					break;
-				}
 				case "extension":
 				{
 					if (argThree == "LOG")
