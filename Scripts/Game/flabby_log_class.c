@@ -198,6 +198,7 @@ class flabby_logger
 	bool printLog = true;
 	string serverName = string.Empty;
 	bool fileLog = true; // write log files
+	int extractPlayerDataSeconds = 0;
 	
 	//! constructor
 	void flabby_logger()
@@ -212,6 +213,7 @@ class flabby_logger
 			flabby_logger_update.updateExtension(flabby_log_output_extension.JSON);
 			flabby_logger_update.addKeyToFile("flabby_log_output_server_console", "TRUE");
 			flabby_logger_update.addKeyToFile("flabby_log_output_server_name", "EXAMPLE SERVER NAME");
+			flabby_logger_update.addKeyToFile("flabby_log_extract_player_data_seconds", "0");
 		}
 		
 		// Get extension from cfg file or set to default
@@ -226,7 +228,7 @@ class flabby_logger
 		string printerLogCfg = "TRUE";
 		if (jsonLoader.ReadValue("flabby_log_output_server_console", printerLogCfg) == false)
 		{
-			flabby_logger_update.addKeyToFile("flabby_log_output_server_console", "TRUE");
+			flabby_logger_update.addKeyToFile("flabby_log_output_server_console", "FALSE");
 		}
 		if (printerLogCfg == "TRUE") printLog = true;
 		else printLog = false;
@@ -237,6 +239,13 @@ class flabby_logger
 		}
 		if (writerLogCfg == "TRUE") fileLog = true;
 		else fileLog = false;
+		string extractStr = "0";
+		if (jsonLoader.ReadValue("flabby_log_extract_player_data_seconds", extractStr) == false)
+		{
+			flabby_logger_update.addKeyToFile("flabby_log_extract_player_data_seconds", "0");
+		}
+		if (extractStr == "0") extractPlayerDataSeconds = 0;
+		else extractPlayerDataSeconds = extractStr.ToInt();
 		
 		// Webhooks configuration
 		bool webhooks_config = flabby_log_webhook_setup();

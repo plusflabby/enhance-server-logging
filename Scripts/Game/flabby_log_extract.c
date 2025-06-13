@@ -59,6 +59,7 @@ class flabby_extract
 		
 		IP = GetGame().GetBackendApi().GetClientLobby().GetMyIP();
 		
+		addons.Clear();
 		array<string> addonOutput = new array<string>();
 		GameProject.GetLoadedAddons(addonOutput);
 		addons.InsertAll(addonOutput);
@@ -68,7 +69,7 @@ class flabby_extract
 }
 
 // Global variable -- May have a, future, need for repeating method use
-ref flabby_extract flabbyExtract = null;
+//ref flabby_extract flabbyExtract = null;
 
 modded class SCR_BaseGameMode
 {
@@ -83,15 +84,11 @@ modded class SCR_BaseGameMode
 	{
 		if (Replication.IsRunning() == false)
 		{
-			GetGame().GetCallqueue().CallLater(setGlobalFlabbyExtract, 1000, false); // 1s
+			GetGame().GetCallqueue().CallLater(setGlobalFlabbyExtract, 1500, false); // 1.5s
 			return;
-		} 
-		
-		if (flabbyExtract == null)
-		{
-			flabbyExtract = new flabby_extract();
-			//GetGame().GetCallqueue().CallLater(setGlobalFlabbyExtract, 60000, false); // 1m / 1 minute
 		}
+		
+		new flabby_extract();
 	}
 	
 	void flabby_SendExtract(int playerId, string platform, string nativeXresolution, string profileName, string machineName, string IP, notnull array<string> addons)
@@ -116,15 +113,25 @@ modded class SCR_BaseGameMode
 			log.add("playerBiId", flabby_logger.getPlayerBohemiaId(playerId));
 			log.add("playerName", flabby_logger.getPlayerName(playerId));
 			
-			log.setDebugTime();
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			log.fileToStoreData.Insert(flabby_log_output_file.PLAYERS);
 			// Print and store log
 			flabbyLogger.printer(log);
 			flabbyLogger.writer(log);
+			
+			Rpc(flabby_AfterExtract, flabbyLogger.extractPlayerDataSeconds);
 			return;
 		}
 		
 		GetGame().GetCallqueue().CallLater(flabby_OnExtract, 3000, false, playerId, platform, nativeXresolution, profileName, machineName, IP, addons); // 3s
+	}
+	
+	[RplRpc(RplChannel.Reliable, RplRcver.Owner)]
+	protected void flabby_AfterExtract(int repeatInSeconds)
+	{
+		if (repeatInSeconds > 0)
+		{
+			GetGame().GetCallqueue().CallLater(setGlobalFlabbyExtract, repeatInSeconds * 1000, false);
+		}
 	}
 }
