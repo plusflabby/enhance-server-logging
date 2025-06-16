@@ -36,7 +36,6 @@ modded class SCR_BaseGameMode
 		m_OnPostCompPlayerDisconnected.Insert(flabby_OnPostCompPlayerDisconnected);
 		m_OnPlayerSpawned.Insert(flabby_OnPlayerSpawned);
 		m_OnPlayerKilled.Insert(flabby_OnPlayerKilled);
-		m_OnControllableDestroyed.Insert(flabby_OnControllableDestroyed);
 		m_OnPlayerDeleted.Insert(flabby_OnPlayerDeleted);
 		m_OnPlayerRoleChange.Insert(flabby_OnPlayerRoleChange);
 		// Other invokers from SCR_BaseGameMode
@@ -45,6 +44,7 @@ modded class SCR_BaseGameMode
 		//m_OnWorldPostProcess.Insert(flabby_OnWorldPostProcess);
 		//m_OnControllableSpawned.Insert(flabby_OnControllableSpawned);
 		//m_OnControllableDeleted.Insert(flabby_OnControllableDeleted);
+		//m_OnControllableDestroyed.Insert(flabby_OnControllableDestroyed);
 		m_OnGameModeEnd.Insert(flabby_OnGameModeEnd);
 	}
 	
@@ -100,7 +100,7 @@ modded class SCR_BaseGameMode
 		{
 			// Add data 
 			log.add("function", "ControllableSpawned");
-			log.add("m_OnWorldPostProcess", "true");
+			log.add("m_OnControllableSpawned", "true");
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
@@ -219,19 +219,20 @@ modded class SCR_BaseGameMode
 		{
 			// Add playerId to log
 			log.add("function", "PlayerKilled");
+			log.add("IsTeamKill", instigatorContextData.DoesPlayerKillCountAsTeamKill());
+			log.add("Relation", SCR_Enum.GetEnumName(SCR_ECharacterDeathStatusRelations, instigatorContextData.GetVictimKillerRelation()));
+			
+			//Victim
 			log.add("VictimPlayerID", instigatorContextData.GetVictimPlayerID().ToString());
 			log.add("VictimPlayerBiId", flabby_logger.getPlayerBohemiaId(instigatorContextData.GetVictimPlayerID()));
 			log.add("VictimPlayerName", flabby_logger.getPlayerName(instigatorContextData.GetVictimPlayerID()));
 			log.add("VictimPlayerFaction", flabby_logger.getPlayerFaction(instigatorContextData.GetVictimPlayerID()));
 			
+			//Killer
 			log.add("KillerPlayerID", instigatorContextData.GetKillerPlayerID().ToString());
 			log.add("KillerPlayerBiId", flabby_logger.getPlayerBohemiaId(instigatorContextData.GetKillerPlayerID()));
 			log.add("KillerPlayerName", flabby_logger.getPlayerName(instigatorContextData.GetKillerPlayerID()));
-			
-			
-			log.add("VictimKillerRelation", SCR_Enum.GetEnumName(SCR_ECharacterDeathStatusRelations, instigatorContextData.GetVictimKillerRelation()));
-			log.add("DoesPlayerKillCountAsTeamKill", instigatorContextData.DoesPlayerKillCountAsTeamKill());
-			
+			log.add("KillerPlayerFaction", flabby_logger.getPlayerFaction(instigatorContextData.GetKillerPlayerID()));
 			BaseWeaponManagerComponent wpnManager = BaseWeaponManagerComponent.Cast(instigatorContextData.GetKillerEntity().FindComponent(BaseWeaponManagerComponent));
 			if (wpnManager)
 			{
@@ -242,9 +243,9 @@ modded class SCR_BaseGameMode
 					log.add("KillerPlayerWeaponName", currentSlot.GetUIInfo().GetName());
 				}
 			}
-			log.add("KillerPlayerFaction", flabby_logger.getPlayerFaction(instigatorContextData.GetKillerPlayerID()));
 			
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
+			log.fileToStoreData.Insert(flabby_log_output_file.PLAYERS);
 			// Print and store log
 			flabbyLogger.printer(log);
 			flabbyLogger.writer(log);
@@ -259,7 +260,7 @@ modded class SCR_BaseGameMode
 		{
 			// Add playerId to log
 			log.add("function", "PlayerSpawned");
-			log.add("playerId", playerId);
+			log.add("playerId", playerId.ToString());
 			log.add("playerOrigin", player.GetOrigin().ToString(true));
 			log.add("playerBiId", flabby_logger.getPlayerBohemiaId(playerId));
 			log.add("playerName", flabby_logger.getPlayerName(playerId));
@@ -281,9 +282,9 @@ modded class SCR_BaseGameMode
 		{
 			// Add playerId to log
 			log.add("function", "Disconnected");
-			log.add("playerId", playerId);
-			log.add("cause", KickCauseCode.NONE.ToString());
-			log.add("timeout", timeout);
+			log.add("playerId", playerId.ToString());
+			log.add("cause", SCR_Enum.GetEnumName(KickCauseCode, cause));
+			log.add("timeout", timeout.ToString());
 			log.add("playerBiId", flabby_logger.getPlayerBohemiaId(playerId));
 			log.add("playerName", flabby_logger.getPlayerName(playerId));
 			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
@@ -302,9 +303,9 @@ modded class SCR_BaseGameMode
 		{
 			// Add playerId to log
 			log.add("function", "CompDisconnected");
-			log.add("playerId", playerId);
-			log.add("cause", KickCauseCode.NONE.ToString());
-			log.add("timeout", timeout);
+			log.add("playerId", playerId.ToString());
+			log.add("cause", SCR_Enum.GetEnumName(KickCauseCode, cause));
+			log.add("timeout", timeout.ToString());
 			log.add("playerName", flabby_logger.getPlayerName(playerId));
 			log.add("playerBiId", flabby_logger.getPlayerBohemiaId(playerId));
 			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));

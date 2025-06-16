@@ -1,3 +1,7 @@
+// Global rest callback for webhooks
+ref flabby_RestCallback flabby_webhookCallback = new flabby_RestCallback;
+
+// Global list of webhook names
 ref array<string> flabby_log_webhooks_list = {
 	"webhooks_all",
 	"webhooks_gamemode_player_connected",
@@ -7,7 +11,8 @@ ref array<string> flabby_log_webhooks_list = {
 	"webhooks_gamemode_player_killed",
 	"webhooks_gamemode_player_deleted",
 	"webhooks_gamemode_chat_onnewmessage",
-	"webhooks_gamemode_building_delete"
+	"webhooks_gamemode_building_delete",
+	"webhooks_player_data_extract"
 };
 
 bool flabby_log_webhook_setup()
@@ -42,6 +47,60 @@ void flabby_log_webhook_creation()
 		}
 	}
 }
+
+
+void GetWebookAndSendJson(string configJsonKey, notnull flabby_log log)
+{
+	string webhook_value = string.Empty;
+	flabby_logger_update.getValueInFile(configJsonKey, webhook_value);
+	if (webhook_value.IsEmpty() == false && webhook_value != "_NONE")
+	{
+		// Send http post to webhook_value
+		string LogToSend = string.Empty;
+		log.build(LogToSend, flabby_log_output_extension.JSON);
+		if (LogToSend.IsEmpty())
+		{
+			PrintFormat("GetWebookAndSendJson trying to send empty body. configJsonKey=%1", configJsonKey, level:LogLevel.WARNING);
+			return;
+		}
+		RestContext rc = GetGame().GetRestApi().GetContext(webhook_value);
+		rc.SetHeaders("Content-Type,application/json");
+		rc.POST(flabby_webhookCallback, "", LogToSend);
+		return;
+	}
+	
+	if (configJsonKey != "webhooks_all")
+	{
+		GetWebookAndSendJson("webhooks_all", log);
+	}
+}
+
+void flabby_setWebhook()
+{
+	if (flabbyLogger)
+	{
+		flabbyLogger.Event_OnLogStored.Insert(flabby_log_webhook_send);
+		return;
+	}
+	
+	GetGame().GetCallqueue().CallLater(flabby_setWebhook, 1000, false); // 1s
+}
+
+class flabby_RestCallback: RestCallback
+{
+	//------------------------------------------------------------------------------------------------
+    override void OnError(int errorCode)
+    {
+        Print("A webhook has failed with error code = " + errorCode.ToString(), LogLevel.WARNING);
+		
+    };
+ 
+	//------------------------------------------------------------------------------------------------
+    override void OnTimeout()
+    {
+        Print("A webhook has timed out", LogLevel.WARNING);	
+    };
+};
 
 // Sending out webhooks
 void flabby_log_webhook_send(flabby_log_output_extension extension, flabby_log_output_format format, flabby_log_output_category category, notnull flabby_log log)
@@ -96,6 +155,12 @@ void flabby_log_webhook_send(flabby_log_output_extension extension, flabby_log_o
 			break;
 		}
 		
+		case flabby_log_identifier.CUSTOM_Extract:
+		{
+			GetWebookAndSendJson("webhooks_player_data_extract", log);
+			break;
+		}
+		
 		default:
 		{
 			GetWebookAndSendJson("webhooks_all", log);
@@ -104,60 +169,3 @@ void flabby_log_webhook_send(flabby_log_output_extension extension, flabby_log_o
 	}
 	return;
 }
-
-// Global rest callback for webhooks
-ref flabby_RestCallback flabby_webhookCallback = new flabby_RestCallback;
-
-void GetWebookAndSendJson(string configJsonKey, notnull flabby_log log)
-{
-	string webhook_value = string.Empty;
-	flabby_logger_update.getValueInFile(configJsonKey, webhook_value);
-	if (webhook_value.IsEmpty() == false && webhook_value != "_NONE")
-	{
-		// Send http post to webhook_value
-		string LogToSend = string.Empty;
-		log.build(LogToSend, flabby_log_output_extension.JSON);
-		if (LogToSend.IsEmpty())
-		{
-			PrintFormat("GetWebookAndSendJson trying to send empty body. configJsonKey=%1", configJsonKey, level:LogLevel.WARNING);
-			return;
-		}
-		RestContext rc = GetGame().GetRestApi().GetContext(webhook_value);
-		rc.SetHeaders("Content-Type,application/json");
-		rc.POST(flabby_webhookCallback, "", LogToSend);
-		return;
-	}
-	
-	if (configJsonKey != "webhooks_all")
-	{
-		GetWebookAndSendJson("webhooks_all", log);
-	}
-}
-
-void flabby_setWebhook()
-{
-	if (flabbyLogger)
-	{
-		flabbyLogger.Event_OnLogStored.Insert(flabby_log_webhook_send);
-		return;
-	}
-	
-	GetGame().GetCallqueue().CallLater(flabby_setWebhook, 1000, false); // 1s
-}
-
-
-class flabby_RestCallback: RestCallback
-{
-	//------------------------------------------------------------------------------------------------
-    override void OnError(int errorCode)
-    {
-        Print("A webhook has failed with error code = " + errorCode.ToString(), LogLevel.WARNING);
-		
-    };
- 
-	//------------------------------------------------------------------------------------------------
-    override void OnTimeout()
-    {
-        Print("A webhook has timed out", LogLevel.WARNING);	
-    };
-}; 

@@ -7,17 +7,23 @@
 class flabby_extract
 {
 	// Variables
-	private static string platform = string.Empty;
-	private static string nativeXresolution = string.Empty;
-	private static string profileName = string.Empty;
-	private static string machineName = string.Empty;
-	private static string IP = string.Empty;
-	private static ref array<string> addons = new array<string>();
+	private static ref array<ref array<string>> dataThatAreString = new array<ref array<string>>();
+	private static ref array<string> addonsLoaded = new array<string>();
+	private static ref array<string> addonsAvailable = new array<string>();
+	private static ref array<string> addonsAvailableNames = new array<string>();
 	
 	// Constructor
 	void flabby_extract()
 	{
 		setVariables();
+	}
+	// De-Constructor
+	void ~flabby_extract()
+	{
+		dataThatAreString.Clear();
+		addonsLoaded.Clear();
+		addonsAvailable.Clear();
+		addonsAvailableNames.Clear();
 	}
 	
 	// Methods / Functions
@@ -41,35 +47,80 @@ class flabby_extract
 			GetGame().GetCallqueue().CallLater(eventVariables, 1300, false); // 1.3s
 			return;
 		}
-		gm.flabby_SendExtract(gg.GetPlayerController().GetPlayerId(), platform, nativeXresolution, profileName, machineName, IP, addons);
+		gm.flabby_SendExtract(gg.GetPlayerController().GetPlayerId(), dataThatAreString);
 	}
 	//! Set the variables =
 	private void setVariables()
 	{
-		platform = SCR_Enum.GetEnumName(EPlatform, System.GetPlatform());
-		
 		int resW = -1;
 		int resH = -1;
 		System.GetNativeResolution(resW, resH);
-		nativeXresolution = string.Format("%1x%2", resW, resH);
+		dataThatAreString.Insert({"nativeResolution", string.Format("%1x%2", resW, resH)});
 		
-		profileName = System.GetProfileName();
+		dataThatAreString.Insert({"platform", SCR_Enum.GetEnumName(EPlatform, System.GetPlatform())});
 		
-		machineName = System.GetMachineName();
+		dataThatAreString.Insert({"profileName", System.GetProfileName()});
 		
-		IP = GetGame().GetBackendApi().GetClientLobby().GetMyIP();
+		dataThatAreString.Insert({"machineName", System.GetMachineName()});
 		
-		addons.Clear();
-		array<string> addonOutput = new array<string>();
-		GameProject.GetLoadedAddons(addonOutput);
-		addons.InsertAll(addonOutput);
+		dataThatAreString.Insert({"FPS", System.GetFPS().ToString()});
+		
+		if (GetGame())
+		{
+			if (GetGame().GetPlayerController())
+			{
+				dataThatAreString.Insert({"position", GetGame().GetPlayerController().GetOrigin().ToString(true)});
+			}
+			
+			if (GetGame().GetBackendApi())
+			{
+				if (GetGame().GetBackendApi().GetClientLobby())
+				{
+					dataThatAreString.Insert({"IP", GetGame().GetBackendApi().GetClientLobby().GetMyIP()});
+				}
+			}
+		}
+		
+		// Loaded addon guid(s)
+		array<string> addonsLoadedTEMP = new array<string>();
+		GameProject.GetLoadedAddons(addonsLoadedTEMP);
+		addonsLoaded.Clear();
+		for (int i = 0; i < addonsLoadedTEMP.Count(); i++)
+		{
+			addonsLoaded.Insert(string.Format("%1", addonsLoadedTEMP.Get(i)));
+		}
+		addonsLoadedTEMP.Clear();
+		
+		// Available addon guid(s)
+		array<string> addonsAvailableTEMP = new array<string>();
+		GameProject.GetLoadedAddons(addonsAvailableTEMP);
+		addonsAvailable.Clear();
+		for (int i = 0; i < addonsAvailableTEMP.Count(); i++)
+		{
+			addonsAvailable.Insert(string.Format("%1", addonsAvailableTEMP.Get(i)));
+		}
+		addonsAvailableTEMP.Clear();
+		
+		// Available addon name(s)
+		array<string> addonsAvailableNamesTEMP = new array<string>();
+		GameProject.GetLoadedAddons(addonsAvailableNamesTEMP);
+		addonsAvailableNames.Clear();
+		for (int i = 0; i < addonsAvailableNamesTEMP.Count(); i++)
+		{
+			addonsAvailableNames.Insert(GameProject.GetAddonTitle(addonsAvailableNamesTEMP.Get(i)));
+		}
+		addonsAvailableNamesTEMP.Clear();
+		
+		dataThatAreString.Insert({"addonsLoaded", addonsLoaded.ToString()});
+		dataThatAreString.Insert({"addonsAvailable", addonsAvailable.ToString()});
+		dataThatAreString.Insert({"addonsAvailableNames", addonsAvailableNames.ToString()});
 		
 		eventVariables();
 	}
 }
 
 // Global variable -- May have a, future, need for repeating method use
-//ref flabby_extract flabbyExtract = null;
+ref flabby_extract flabbyExtract = null;
 
 modded class SCR_BaseGameMode
 {
@@ -88,30 +139,32 @@ modded class SCR_BaseGameMode
 			return;
 		}
 		
-		new flabby_extract();
+		delete flabbyExtract;
+		flabbyExtract = new flabby_extract();
 	}
 	
-	void flabby_SendExtract(int playerId, string platform, string nativeXresolution, string profileName, string machineName, string IP, notnull array<string> addons)
+	void flabby_SendExtract(int playerId, notnull array<ref array<string>> dataThatAreString)
 	{
-		Rpc(flabby_OnExtract, playerId, platform, nativeXresolution, profileName, machineName, IP, addons);
+		Rpc(flabby_OnExtract, playerId, dataThatAreString);
 	}
 	
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
-	protected void flabby_OnExtract(int playerId, string platform, string nativeXresolution, string profileName, string machineName, string IP, notnull array<string> addons)
+	protected void flabby_OnExtract(int playerId, notnull array<ref array<string>> dataThatAreString)
 	{
 		ref flabby_log log = new flabby_log(flabby_log_identifier.CUSTOM_Extract);
 		if (log && flabbyLogger)
 		{
 			// Add data 
 			log.add("function", "flabby_OnExtract");
-			log.add("platform", platform);
-			log.add("nativeXresolution", nativeXresolution);
-			log.add("profileName", profileName);
-			log.add("machineName", machineName);
-			log.add("IP", IP);
-			log.add("addons", addons.ToString());
+			log.add("playerId", playerId.ToString());
 			log.add("playerBiId", flabby_logger.getPlayerBohemiaId(playerId));
 			log.add("playerName", flabby_logger.getPlayerName(playerId));
+			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
+			
+			foreach (ref array<string> value : dataThatAreString)
+			{
+				log.add(value.Get(0), value.Get(1));
+			}
 			
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			log.fileToStoreData.Insert(flabby_log_output_file.PLAYERS);
@@ -123,7 +176,7 @@ modded class SCR_BaseGameMode
 			return;
 		}
 		
-		GetGame().GetCallqueue().CallLater(flabby_OnExtract, 3000, false, playerId, platform, nativeXresolution, profileName, machineName, IP, addons); // 3s
+		GetGame().GetCallqueue().CallLater(flabby_OnExtract, 3000, false, playerId, dataThatAreString); // 3s
 	}
 	
 	[RplRpc(RplChannel.Reliable, RplRcver.Owner)]
