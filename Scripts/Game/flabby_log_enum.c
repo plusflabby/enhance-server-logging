@@ -20,7 +20,8 @@ enum flabby_log_output_extension
 {
 	JSON, // Output to ".json" file
 	LOG, // Output to ".log" file
-	TXT // Output plain text ".txt" file
+	TXT, // Output plain text ".txt" file
+	DISCORD // Discord output for webhooks
 }
 // Files 
 enum flabby_log_output_file

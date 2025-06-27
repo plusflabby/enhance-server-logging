@@ -57,7 +57,21 @@ void GetWebookAndSendJson(string configJsonKey, notnull flabby_log log)
 	{
 		// Send http post to webhook_value
 		string LogToSend = string.Empty;
-		log.build(LogToSend, flabby_log_output_extension.JSON);
+		if (webhook_value.Contains("discord.com"))
+		{
+			//string jsonStr = string.Empty;
+			//log.buildDiscord(jsonStr);
+			log.build(LogToSend, flabby_log_output_extension.DISCORD);
+			LogToSend.Replace(", ", "\\n");
+			string Username = "Logging Enhanced by flabby";
+			if (flabbyLogger.serverName != "EXAMPLE SERVER NAME") Username = flabbyLogger.serverName;
+			string discordOutput1 = "{\"username\": \"%1\", \"content\": \"%2\" }";
+			LogToSend = string.Format(discordOutput1, Username, LogToSend);
+		}
+		else
+		{
+			log.build(LogToSend, flabby_log_output_extension.JSON);
+		}
 		if (LogToSend.IsEmpty())
 		{
 			PrintFormat("GetWebookAndSendJson trying to send empty body. configJsonKey=%1", configJsonKey, level:LogLevel.WARNING);

@@ -94,10 +94,10 @@ class flabby_log
 	//! Build this class and output
 	void build(out string output, flabby_log_output_extension extension)
 	{
-		addDebugTime();
-		
 		if (extension == flabby_log_output_extension.TXT)
 		{
+			addDebugTime();
+			
 			string str = string.Empty;
 			for (int i; i < info.Count(); i++)
 			{
@@ -118,6 +118,8 @@ class flabby_log
 		}
 		else if (extension == flabby_log_output_extension.LOG)
 		{
+			addDebugTime();
+			
 			string str = string.Empty;
 			for (int i; i < info.Count(); i++)
 			{
@@ -138,6 +140,8 @@ class flabby_log
 		}
 		else if (extension == flabby_log_output_extension.JSON)
 		{
+			addDebugTime();
+			
 			SCR_JsonSaveContext jsonSaver = new SCR_JsonSaveContext();
 			for (int i; i < info.Count(); i++)
 			{
@@ -149,11 +153,86 @@ class flabby_log
 			output = jsonSaver.ExportToString();
 			return;
 		}
+		else if (extension == flabby_log_output_extension.DISCORD)
+		{
+			string str = string.Empty;
+			for (int i; i < info.Count(); i++)
+			{
+				string key = info.GetKey(i);
+				flabby_data value = info.GetElement(i);
+				
+				if (str.IsEmpty())
+				{
+					str += string.Format("%1: %2", key, value.data);
+				}
+				else 
+				{
+					str += string.Format(", %1: %2", key, value.data);
+				}
+			}
+			output = str;
+			return;
+		}
 		else
 		{
 			Print("flabby_log.build() Extension not defined", LogLevel.ERROR);
 		}
 		
+	}
+	private static string discordOutput1 = "{\"username\": \"%1\", \"embeds\": [%2] }";
+	private static string discordOutput2 = "{\"title\": \"Log Page %1\", \"fields\": [%2] }";
+	void buildDiscord(out string output)
+	{
+		//addDebugTime();
+		
+		string Username = "Logging Enhanced by flabby";
+		if (flabbyLogger.serverName != "EXAMPLE SERVER NAME") Username = flabbyLogger.serverName;
+			
+		string embesdStrug = string.Empty;
+		
+		if (info.Count() > 0)
+		{
+			int numberOfEmbeds = 0;
+			if (info.Count() > 9) numberOfEmbeds = Math.Ceil(info.Count() / 9);
+			else numberOfEmbeds = 1; 
+			if (numberOfEmbeds > 10) numberOfEmbeds = 10;
+			
+			// embeds
+			for (int e; e < numberOfEmbeds; e++)
+			{
+				// embed
+				ref SCR_JsonSaveContext embed = new SCR_JsonSaveContext();
+				
+				// embed's fields
+				int numberOfFieldsForEmbed = 0;
+				if (info.Count() > 20) numberOfFieldsForEmbed = 20;
+				else numberOfFieldsForEmbed = info.Count();
+				string fields = string.Empty;
+				for (int f; f < numberOfFieldsForEmbed; f++)
+				{
+					int i = f;
+					if (info.Count() > 20) i = f + (20 * e);
+					
+					string key = info.GetKey(i);
+					flabby_data value = info.GetElement(i);
+					
+					ref SCR_JsonSaveContext field = new SCR_JsonSaveContext();
+					field.WriteValue("name", key);
+					field.WriteValue("value", value.data);
+					fields = fields + field.ExportToString();
+				}
+				fields.Replace("}{", "},{");
+				string output3 = string.Format(discordOutput2, e, fields);
+				embesdStrug = embesdStrug + output3;
+			}
+			embesdStrug.Replace("}{", "},{");
+			
+		}
+		string output4 = string.Format(discordOutput1, Username, embesdStrug);
+		
+		// Return array as string
+		output = output4;
+		return;
 	}
 	string AsString()
 	{

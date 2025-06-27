@@ -80,13 +80,17 @@ class flabby_log_cmd_help : flabby_log_command
 	override ref ScrServerCmdResult OnChatServerExecution(array<string> argv, int playerId)
 	{
 		string helpString = string.Empty;
-		helpString += "#login Is required for before a command\n";
+		helpString += "#login is required for before commands\n";
 		helpString += "Examples of updating log extensions,\n";
 		helpString += "#log extension JSON - File(s) will be .json\n";
 		helpString += "#log extension LOG - File(s) will in .log\n";;
 		helpString += "#log extension TXT - File(s) will plain .txt\n";
-		helpString += "Example to disable server log printing,\n";
-		helpString += "#log print false - No printing in server console log\n";
+		helpString += "Example to disable server logs,\n";
+		helpString += "#log print false - No printing in server console\n";
+		helpString += "Example to disable server file logs,\n";
+		helpString += "#log file false - No writing in log files\n";
+		helpString += "Example to make a test log,\n";
+		helpString += "#log test - Will write and or print a test log\n";
 		
 		return ScrServerCmdResult(helpString, EServerCmdResultType.OK);
 	}
