@@ -91,10 +91,13 @@ modded class SCR_BaseGameMode
 		}
 		for (int i; i < identifiers.Count(); i++)
 		{
-			ref flabby_identifier id = identifiers.Get(i);
-			if (players.Find(id.game) > -1)
+			ref flabby_identifier id = identifiers.GetElement(i);
+			if (id && players)
 			{
-				flabbyIdentifier.Remove(i);
+				if (players.Find(id.game) > -1)
+				{
+					flabbyIdentifier.Remove(i);
+				}
 			}
 		}
 	}

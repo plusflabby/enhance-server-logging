@@ -167,7 +167,7 @@ class flabby_log
 				}
 				else 
 				{
-					str += string.Format(", %1: %2", key, value.data);
+					str += string.Format(",,, %1: %2", key, value.data);
 				}
 			}
 			output = str;
