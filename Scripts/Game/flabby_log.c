@@ -227,12 +227,14 @@ modded class SCR_BaseGameMode
 			log.add("VictimPlayerBiId", flabby_logger.getPlayerBohemiaId(instigatorContextData.GetVictimPlayerID()));
 			log.add("VictimPlayerName", flabby_logger.getPlayerName(instigatorContextData.GetVictimPlayerID()));
 			log.add("VictimPlayerFaction", flabby_logger.getPlayerFaction(instigatorContextData.GetVictimPlayerID()));
+			log.add("VictimPlayerPosition", instigatorContextData.GetVictimEntity().GetOrigin().ToString());
 			
 			//Killer
 			log.add("KillerPlayerID", instigatorContextData.GetKillerPlayerID().ToString());
 			log.add("KillerPlayerBiId", flabby_logger.getPlayerBohemiaId(instigatorContextData.GetKillerPlayerID()));
 			log.add("KillerPlayerName", flabby_logger.getPlayerName(instigatorContextData.GetKillerPlayerID()));
 			log.add("KillerPlayerFaction", flabby_logger.getPlayerFaction(instigatorContextData.GetKillerPlayerID()));
+			log.add("KillerPlayerPosition", instigatorContextData.GetKillerEntity().GetOrigin().ToString());
 			BaseWeaponManagerComponent wpnManager = BaseWeaponManagerComponent.Cast(instigatorContextData.GetKillerEntity().FindComponent(BaseWeaponManagerComponent));
 			if (wpnManager)
 			{

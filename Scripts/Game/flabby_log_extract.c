@@ -8,8 +8,9 @@ class flabby_extract
 {
 	// Variables
 	private static ref array<ref array<string>> dataThatAreString = new array<ref array<string>>();
-	private static string LoadedAddons = string.Empty;
-	private static string AvailableAddons = string.Empty;
+	private static ref array<ref array<string>> dataThatAreString2 = new array<ref array<string>>();
+	//private static string LoadedAddons = string.Empty;
+	//private static string AvailableAddons = string.Empty;
 	private static string AvailableAddonsNames = string.Empty;
 	
 	// Methods / Functions
@@ -18,8 +19,8 @@ class flabby_extract
 	{
 		// Clear old data
 		dataThatAreString.Clear();
-		LoadedAddons = string.Empty;
-		AvailableAddons = string.Empty;
+		//LoadedAddons = string.Empty;
+		//AvailableAddons = string.Empty;
 		AvailableAddonsNames = string.Empty;
 		
 		int resW = -1;
@@ -50,6 +51,7 @@ class flabby_extract
 		}
 		
 		// Loaded addon guid(s)
+		/*
 		array<string> addonsLoadedTEMP = new array<string>();
 		GameProject.GetLoadedAddons(addonsLoadedTEMP);
 		LoadedAddons = string.Empty;
@@ -70,7 +72,7 @@ class flabby_extract
 			else AvailableAddons = AvailableAddons + ", " + string.Format("%1", addonsAvailableTEMP.Get(i));
 		}
 		addonsAvailableTEMP.Clear();
-		
+		*/
 		// Available addon name(s)
 		array<string> addonsAvailableNamesTEMP = new array<string>();
 		GameProject.GetLoadedAddons(addonsAvailableNamesTEMP);
@@ -82,14 +84,18 @@ class flabby_extract
 		}
 		addonsAvailableNamesTEMP.Clear();
 		
-		dataThatAreString.Insert({"addonsLoaded", LoadedAddons});
-		dataThatAreString.Insert({"addonsAvailable", AvailableAddons});
-		dataThatAreString.Insert({"addonsAvailableNames", AvailableAddonsNames});
+		//dataThatAreString.Insert({"addonsLoaded", LoadedAddons});
+		//dataThatAreString.Insert({"addonsAvailable", AvailableAddons});
+		dataThatAreString2.Insert({"addonsAvailableNames", AvailableAddonsNames});
 	}
 	
 	ref array<ref array<string>> data()
 	{
 		return dataThatAreString;
+	}
+	ref array<ref array<string>> data2()
+	{
+		return dataThatAreString2;
 	}
 }
 
@@ -104,15 +110,16 @@ modded class SCR_PlayerController
 		
 		if (!Replication.IsServer())
 		{
-			GetGame().GetCallqueue().CallLater(RequestServerExtractTime, 500, false);
+			GetGame().GetCallqueue().CallLater(RequestServerExtractTime, 500, false, true);
 		}
 	}
 	
-	void RequestServerExtractTime()
+	void RequestServerExtractTime(bool firstExtract)
 	{
 		flabbyExtract.setVariables();
 		
-		Rpc(RpcAsk_RequestServerExtractTime, GetPlayerId() ,flabbyExtract.data());
+		if (firstExtract) Rpc(RpcAsk_RequestServerExtractTime, GetPlayerId(), flabbyExtract.data2());
+		Rpc(RpcAsk_RequestServerExtractTime, GetPlayerId(), flabbyExtract.data());
 	};
 
 	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
@@ -148,6 +155,6 @@ modded class SCR_PlayerController
 	void RpcDo_RequestServerExtractTime(int time) 
 	{
 		//GetGame().GetCallqueue().Remove(RequestServerExtractTime);
-		if (time > 0) GetGame().GetCallqueue().CallLater(RequestServerExtractTime, time * 1000, false);
+		if (time > 0) GetGame().GetCallqueue().CallLater(RequestServerExtractTime, time * 1000, false, false);
 	};
 }
