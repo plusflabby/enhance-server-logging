@@ -19,6 +19,7 @@ class flabby_extract
 	{
 		// Clear old data
 		dataThatAreString.Clear();
+		dataThatAreString2.Clear();
 		//LoadedAddons = string.Empty;
 		//AvailableAddons = string.Empty;
 		AvailableAddonsNames = string.Empty;
@@ -38,7 +39,10 @@ class flabby_extract
 		{
 			if (GetGame().GetPlayerController())
 			{
-				dataThatAreString.Insert({"position", GetGame().GetPlayerController().GetOrigin().ToString(true)});
+				if (GetGame().GetPlayerController().GetControlledEntity())
+				{
+					dataThatAreString.Insert({"position", GetGame().GetPlayerController().GetControlledEntity().GetOrigin().ToString(true)});
+				}
 			}
 			
 			if (GetGame().GetBackendApi())
