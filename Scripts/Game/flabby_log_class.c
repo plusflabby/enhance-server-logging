@@ -332,6 +332,19 @@ class flabby_logger
 		{
 			flabby_log_webhook_creation();
 		}
+		
+		// Game start log
+		ref flabby_log log = new flabby_log(flabby_log_identifier.SCR_GameMode_112);
+		if (log && flabbyLogger)
+		{
+			// Add data 
+			log.add("function", "Event_OnGameStart");
+			log.add("loggerStart", "true");
+			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
+			// Print and store log
+			flabbyLogger.printer(log);
+			flabbyLogger.writer(log);
+		}
 	}
 	
 	//! Prints the log

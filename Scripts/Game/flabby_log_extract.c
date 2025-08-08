@@ -50,6 +50,7 @@ class flabby_extract
 				if (GetGame().GetBackendApi().GetClientLobby())
 				{
 					dataThatAreString.Insert({"IP", GetGame().GetBackendApi().GetClientLobby().GetMyIP()});
+					dataThatAreString.Insert({"IP2", RplSession.TryGetListenAddress()});
 				}
 			}
 		}

@@ -12,7 +12,9 @@ ref array<string> flabby_log_webhooks_list = {
 	"webhooks_gamemode_player_deleted",
 	"webhooks_gamemode_chat_onnewmessage",
 	"webhooks_gamemode_building_delete",
-	"webhooks_player_data_extract"
+	"webhooks_player_data_extract",
+	"webhooks_gamemode_start",
+	"webhooks_player_scores"
 };
 
 bool flabby_log_webhook_setup()
@@ -63,7 +65,7 @@ void GetWebookAndSendJson(string configJsonKey, notnull flabby_log log)
 			LogToSend.Replace(",,, ", "\\n");
 			string Username = "Logging Enhanced by flabby";
 			if (flabbyLogger.serverName != "EXAMPLE SERVER NAME") Username = flabbyLogger.serverName;
-			string discordOutput1 = "{\"username\": \"%1\", \"content\": \"%2\" }";
+			const string discordOutput1 = "{\"username\": \"%1\", \"content\": \"%2\" }";
 			LogToSend = string.Format(discordOutput1, Username, LogToSend);
 		}
 		else
@@ -170,6 +172,18 @@ void flabby_log_webhook_send(flabby_log_output_extension extension, flabby_log_o
 		case flabby_log_identifier.CUSTOM_Extract:
 		{
 			GetWebookAndSendJson("webhooks_player_data_extract", log);
+			break;
+		}
+		
+		case flabby_log_identifier.SCR_GameMode_112:
+		{
+			GetWebookAndSendJson("webhooks_gamemode_start", log);
+			break;
+		}
+		
+		case flabby_log_identifier.SCR_BaseScoringSystemComponent_101:
+		{
+			GetWebookAndSendJson("webhooks_player_scores", log);
 			break;
 		}
 		

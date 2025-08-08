@@ -8,7 +8,6 @@ modded class SCR_BaseGameMode
 	override protected void EOnInit(IEntity owner)
 	{
 		super.EOnInit(owner);
-		
 		setScripts();
 	}
 	
@@ -39,7 +38,7 @@ modded class SCR_BaseGameMode
 		m_OnPlayerDeleted.Insert(flabby_OnPlayerDeleted);
 		m_OnPlayerRoleChange.Insert(flabby_OnPlayerRoleChange);
 		// Other invokers from SCR_BaseGameMode
-		Event_OnGameStart.Insert(flabby_Event_OnGameStart);
+		//Event_OnGameStart.Insert(flabby_Event_OnGameStart);
 		m_OnGameEnd.Insert(flabby_OnGameEnd);
 		//m_OnWorldPostProcess.Insert(flabby_OnWorldPostProcess);
 		//m_OnControllableSpawned.Insert(flabby_OnControllableSpawned);
@@ -439,4 +438,3 @@ modded class SCR_BaseGameMode
 		}
 	}
 }
-
