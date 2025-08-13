@@ -28,7 +28,7 @@ modded class SCR_BaseGameMode
 		if (flabbyIdentifier == null || flabbyLogger == null)
 		{
 			GetGame().GetCallqueue().CallLater(setGlobalVariables, 1000, false); // 1s
-			GetGame().GetCallqueue().CallLater(flabby_setWebhook, 1500, false); // 1.5s
+			//GetGame().GetCallqueue().CallLater(flabby_setWebhook, 1500, false); // 1.5s
 		}
 		
 		id_setScripts();

@@ -299,10 +299,10 @@ class flabby_logger
 		SCR_JsonLoadContext jsonLoader = new SCR_JsonLoadContext();
 		jsonLoader.LoadFromFile("$profile:/flabby/enhanced-logging.json");
 		jsonLoader.ReadValue("flabby_log_output_extension", extension);
+		serverName = "EXAMPLE SERVER NAME";
 		if (jsonLoader.ReadValue("flabby_log_output_server_name", serverName) == false)
 		{
 			flabby_logger_update.addKeyToFile("flabby_log_output_server_name", "EXAMPLE SERVER NAME");
-			serverName = "EXAMPLE SERVER NAME";
 		}
 		string printerLogCfg = "TRUE";
 		if (jsonLoader.ReadValue("flabby_log_output_server_console", printerLogCfg) == false)
@@ -333,17 +333,22 @@ class flabby_logger
 			flabby_log_webhook_creation();
 		}
 		
+		GetGame().GetCallqueue().CallLater(loadGame, 5 * 1000, false);
+	}
+	
+	private void loadGame()
+	{
 		// Game start log
 		ref flabby_log log = new flabby_log(flabby_log_identifier.SCR_GameMode_112);
 		if (log && flabbyLogger)
 		{
 			// Add data 
-			log.add("function", "Event_OnGameStart");
-			log.add("loggerStart", "true");
+			log.add("function", "OnGameStart");
 			log.fileToStoreData.Insert(flabby_log_output_file.ALL);
 			// Print and store log
 			flabbyLogger.printer(log);
 			flabbyLogger.writer(log);
+			
 		}
 	}
 	

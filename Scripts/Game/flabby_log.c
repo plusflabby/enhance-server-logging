@@ -47,7 +47,6 @@ modded class SCR_BaseGameMode
 		m_OnGameModeEnd.Insert(flabby_OnGameModeEnd);
 	}
 	
-	
 	protected void flabby_OnControllableDeleted(int playerId, IEntity player)
 	{
 		// Build log 

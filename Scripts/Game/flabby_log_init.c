@@ -16,6 +16,7 @@ void setGlobalVariables()
 		{
 			flabbyLogger = new flabby_logger();
 			flabbyIdentifier = new map<int, ref flabby_identifier>();
+			flabby_setWebhook();
 			return;
 		}
 	}
