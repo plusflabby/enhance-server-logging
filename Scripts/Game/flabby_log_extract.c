@@ -12,6 +12,8 @@ class flabby_extract
 	//private static string LoadedAddons = string.Empty;
 	//private static string AvailableAddons = string.Empty;
 	private static string AvailableAddonsNames = string.Empty;
+	private static string IPv4 = string.Empty;
+	private static string IPv6 = string.Empty;
 	
 	// Methods / Functions
 	//! Set the variables =
@@ -35,6 +37,10 @@ class flabby_extract
 		
 		dataThatAreString.Insert({"FPS", System.GetFPS().ToString()});
 		
+		if (IPv4.IsEmpty() == false) dataThatAreString.Insert({"IPv4", IPv4});
+		if (IPv6.IsEmpty() == false) dataThatAreString.Insert({"IPv6", IPv6});
+		
+		
 		if (GetGame())
 		{
 			if (GetGame().GetPlayerController())
@@ -44,16 +50,8 @@ class flabby_extract
 					dataThatAreString.Insert({"position", GetGame().GetPlayerController().GetControlledEntity().GetOrigin().ToString(true)});
 				}
 			}
-			
-			if (GetGame().GetBackendApi())
-			{
-				if (GetGame().GetBackendApi().GetClientLobby())
-				{
-					dataThatAreString.Insert({"IP", GetGame().GetBackendApi().GetClientLobby().GetMyIP()});
-					dataThatAreString.Insert({"IP2", RplSession.TryGetListenAddress()});
-				}
-			}
 		}
+		
 		
 		// Loaded addon guid(s)
 		/*
@@ -102,10 +100,32 @@ class flabby_extract
 	{
 		return dataThatAreString2;
 	}
+	
+	void setIPs()
+	{
+		IPv4 = string.Empty;
+		RestContext rcIPv4 = GetGame().GetRestApi().GetContext("https://api.ipify.org");
+		rcIPv4.GET(flabbyExtractCallbackIPv4, "");
+		
+		IPv6 = string.Empty;
+		RestContext rcIPv6 = GetGame().GetRestApi().GetContext("https://api6.ipify.org");
+		rcIPv6.GET(flabbyExtractCallbackIPv6, "");
+	}
+	
+	void setIPv4(string ip)
+	{
+		IPv4 = ip;
+	}
+	void setIPv6(string ip)
+	{
+		IPv6 = ip;
+	}
 }
 
 // Global variable -- May have a, future, need for repeating method use
 ref flabby_extract flabbyExtract = new flabby_extract();
+ref flabby_RestCallback_IPv4 flabbyExtractCallbackIPv4 = new flabby_RestCallback_IPv4;
+ref flabby_RestCallback_IPv6 flabbyExtractCallbackIPv6 = new flabby_RestCallback_IPv6;
 
 modded class SCR_PlayerController
 {
@@ -121,6 +141,7 @@ modded class SCR_PlayerController
 	
 	void RequestServerExtractTime(bool firstExtract)
 	{
+		if (firstExtract) flabbyExtract.setIPs();
 		flabbyExtract.setVariables();
 		
 		if (firstExtract) Rpc(RpcAsk_RequestServerExtractTime, GetPlayerId(), flabbyExtract.data2());
@@ -163,3 +184,42 @@ modded class SCR_PlayerController
 		if (time > 0) GetGame().GetCallqueue().CallLater(RequestServerExtractTime, time * 1000, false, false);
 	};
 }
+
+class flabby_RestCallback_IPv4: RestCallback
+{
+	override void OnSuccess(string data, int dataSize)
+	{
+		flabbyExtract.setIPv4(data);
+	}
+	//------------------------------------------------------------------------------------------------
+    override void OnError(int errorCode)
+    {
+        Print("flabby_RestCallback_IPv4 has failed with error code = " + errorCode.ToString(), LogLevel.WARNING);
+		
+    };
+ 
+	//------------------------------------------------------------------------------------------------
+    override void OnTimeout()
+    {
+        Print("flabby_RestCallback_IPv4", LogLevel.WARNING);	
+    };
+};
+class flabby_RestCallback_IPv6: RestCallback
+{
+	override void OnSuccess(string data, int dataSize)
+	{
+		flabbyExtract.setIPv6(data);
+	}
+	//------------------------------------------------------------------------------------------------
+    override void OnError(int errorCode)
+    {
+        Print("flabby_RestCallback_IPv6 has failed with error code = " + errorCode.ToString(), LogLevel.WARNING);
+		
+    };
+ 
+	//------------------------------------------------------------------------------------------------
+    override void OnTimeout()
+    {
+        Print("flabby_RestCallback_IPv6 has timed out", LogLevel.WARNING);	
+    };
+};
