@@ -120,6 +120,14 @@ class flabby_extract
 	{
 		IPv6 = ip;
 	}
+	
+	bool hasIPs()
+	{
+		bool hasIp = false;
+		if (IPv4.IsEmpty() == false) hasIp = true;
+		if (IPv6.IsEmpty() == false) hasIp = true;
+		return hasIp;
+	}
 }
 
 // Global variable -- May have a, future, need for repeating method use
@@ -141,7 +149,14 @@ modded class SCR_PlayerController
 	
 	void RequestServerExtractTime(bool firstExtract)
 	{
-		if (firstExtract) flabbyExtract.setIPs();
+		if (firstExtract && flabbyExtract.hasIPs() == false)
+		{
+			flabbyExtract.setIPs();
+			
+			GetGame().GetCallqueue().CallLater(RequestServerExtractTime, 2500, false, true);
+			return;
+		}
+		
 		flabbyExtract.setVariables();
 		
 		if (firstExtract) Rpc(RpcAsk_RequestServerExtractTime, GetPlayerId(), flabbyExtract.data2());
