@@ -13,8 +13,7 @@ ref array<string> flabby_log_webhooks_list = {
 	"webhooks_gamemode_chat_onnewmessage",
 	"webhooks_gamemode_building_delete",
 	"webhooks_player_data_extract",
-	"webhooks_gamemode_start",
-	"webhooks_player_scores"
+	"webhooks_gamemode_start"
 };
 
 bool flabby_log_webhook_setup()
@@ -178,12 +177,6 @@ void flabby_log_webhook_send(flabby_log_output_extension extension, flabby_log_o
 		case flabby_log_identifier.SCR_GameMode_112:
 		{
 			GetWebookAndSendJson("webhooks_gamemode_start", log);
-			break;
-		}
-		
-		case flabby_log_identifier.SCR_BaseScoringSystemComponent_101:
-		{
-			GetWebookAndSendJson("webhooks_player_scores", log);
 			break;
 		}
 		

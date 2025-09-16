@@ -240,7 +240,7 @@ modded class SCR_BaseGameMode
 				if (currentSlot)
 				{
 					log.add("KillerPlayerWeaponType", SCR_Enum.GetEnumName(EWeaponType, currentSlot.GetWeaponType()));
-					log.add("KillerPlayerWeaponName", currentSlot.GetUIInfo().GetName());
+					if (currentSlot.GetUIInfo()) log.add("KillerPlayerWeaponName", currentSlot.GetUIInfo().GetName());
 				}
 			}
 			

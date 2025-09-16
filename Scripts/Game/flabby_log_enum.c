@@ -68,6 +68,4 @@ enum flabby_log_identifier
 	SCR_Building_101, // SCR_CampaignBuildingNetworkComponent.SendDeleteNotification() // When disassembled structure
 	
 	CUSTOM_Extract, // Extract is requested // When joining
-	
-	SCR_BaseScoringSystemComponent_101, // When score changes
 }
