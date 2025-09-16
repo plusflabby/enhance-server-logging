@@ -1,3 +1,11 @@
+/*
+ * flabby_log_config_file.c
+ *
+ * Purpose: Handles logging for configuration file operations in the game.
+ * Contains functions for reading, writing, and logging config file events.
+  * Author: https://github.com/plusflabby
+ */
+
 //! Class for updating log configurations
 class flabby_logger_update
 {

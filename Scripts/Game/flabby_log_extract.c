@@ -1,4 +1,12 @@
 /*
+ * flabby_log_extract.c
+ *
+ * Purpose: Handles logging for data extraction events in the game.
+ * Contains functions for extracting, formatting, and outputting extraction logs.
+  * Author: https://github.com/plusflabby
+ */
+
+/*
 !
 !	Client's Data -> Authority / Server -> flabby_log
 !

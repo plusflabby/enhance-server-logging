@@ -1,59 +1,58 @@
 /*
-	Classes to be inherited
-*/
-//! Core commands class
+ * flabby_log_commands.c
+ *
+ * Purpose: Handles logging for command execution and related events in the game.
+ * Contains functions for tracking, formatting, and outputting command logs.
+  * Author: https://github.com/plusflabby
+ */
+
+// Base class for all flabby logging commands. Provides common functionality
+// and sets default permissions for admin-only access via RCON or chat.
 class flabby_log_command : ScrServerCommand
 {
+	// Base keyword for all flabby commands
 	override event string GetKeyword()
 	{
 		return "flabby";
 	}
 	
-	
-	// Run command server-side
-	//-----------------------------------------------------------------------------
+	// All flabby commands run server-side for security and consistency
 	override bool IsServerSide()
 	{
 		return true;
 	}
 	
-	// Set requirement to admin permission via RCON
-	//-----------------------------------------------------------------------------
+	// Require admin permissions for RCON access
 	override int RequiredRCONPermission()
 	{
 		return ERCONPermissions.PERMISSIONS_ADMIN;
 	}
 	
-	// Set requirement to be logged in administrator for chat command
-	//-----------------------------------------------------------------------------
+	// Require administrator role for chat command access
 	override int RequiredChatPermission()
 	{
 		return EPlayerRole.ADMINISTRATOR;
 	}
 	
-	// Handle Chat command on server
-	//-----------------------------------------------------------------------------
+	// Handle chat command execution on server
 	override ref ScrServerCmdResult OnChatServerExecution(array<string> argv, int playerId)
 	{
 		return ScrServerCmdResult(string.Empty, EServerCmdResultType.OK);
 	}
 	
-	// Handle Chat command on client
-	//-----------------------------------------------------------------------------
+	// Handle chat command execution on client
 	override ref ScrServerCmdResult OnChatClientExecution(array<string> argv, int playerId)
 	{
 		return ScrServerCmdResult(string.Empty, EServerCmdResultType.OK);
 	}
 	
-	// Handle RCON command on server
-	//-----------------------------------------------------------------------------
+	// Handle RCON command execution on server
 	override ref ScrServerCmdResult OnRCONExecution(array<string> argv)
 	{
 		return ScrServerCmdResult(string.Empty, EServerCmdResultType.OK);
 	}
 	
-	// Handle Pending command
-	//-----------------------------------------------------------------------------
+	// Handle pending command updates
 	override ref ScrServerCmdResult OnUpdate()
 	{
 		return ScrServerCmdResult(string.Empty, EServerCmdResultType.OK);
@@ -64,7 +63,9 @@ class flabby_log_command : ScrServerCommand
 /*
 	Commands
 */
-//! Help command
+
+// Help command for logging system - displays available commands and usage.
+// Available to all players (no admin requirement).
 class flabby_log_cmd_help : flabby_log_command
 {
 	override event string GetKeyword()
@@ -72,11 +73,13 @@ class flabby_log_cmd_help : flabby_log_command
 		return "loghelp";
 	}
 	
+	// Allow all players to access help command
 	override int RequiredChatPermission()
 	{
 		return EPlayerRole.NONE;
 	}
 	
+	// Display help information when executed via chat
 	override ref ScrServerCmdResult OnChatServerExecution(array<string> argv, int playerId)
 	{
 		string helpString = string.Empty;

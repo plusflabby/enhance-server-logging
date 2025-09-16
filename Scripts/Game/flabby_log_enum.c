@@ -1,4 +1,13 @@
 /*
+ * flabby_log_enum.c
+ *
+ * Purpose: Handles logging for enum-related operations in the game.
+ * Contains functions for tracking, formatting, and outputting enum logs.
+  * Author: https://github.com/plusflabby
+ */
+
+// Add similar comments for each function and major code block below
+/*
 	Enums for customization(s) though command
 */
 // How to categorize data in file(s)

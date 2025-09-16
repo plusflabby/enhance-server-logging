@@ -1,16 +1,28 @@
 /*
+ * flabby_log.c
+ *
+ * Purpose: Main logging implementation for the game server.
+ * Contains core functions for initializing, writing, and managing logs.
+ * Author: https://github.com/plusflabby
+ */
+
+/*
 	Modifications
 */
 //! Mod to SCR_BaseGameMode
 modded class SCR_BaseGameMode
 {
-	//! Setting up to set global flabbyLogger variable 
+	// Entry point: called when the GameMode entity initializes.
+	// Ensures base initialization runs then attaches our event handlers.
 	override protected void EOnInit(IEntity owner)
 	{
 		super.EOnInit(owner);
 		setScripts();
 	}
 	
+	// Attach event handlers to GameMode invokers.
+	// - Skips attaching on clients (server-only registration).
+	// - If replication isn't running yet we retry after a short delay.
 	protected void setScripts()
 	{
 		if (Replication.IsClient())
@@ -24,7 +36,7 @@ modded class SCR_BaseGameMode
 			return;
 		}
 		
-		// Player invokers from SCR_BaseGameMode 
+		// Player-related event handlers
 		m_OnPlayerConnected.Insert(flabby_OnPlayerConnected);
 		m_OnPlayerAuditSuccess.Insert(flabby_OnAuditSuccess);
 		m_OnPlayerAuditFail.Insert(flabby_OnAuditFailed);
@@ -47,6 +59,8 @@ modded class SCR_BaseGameMode
 		m_OnGameModeEnd.Insert(flabby_OnGameModeEnd);
 	}
 	
+	// Handler: controllable (e.g., a vehicle or player-controlled entity) removed.
+	// Params: `playerId` - game player id, `player` - entity reference.
 	protected void flabby_OnControllableDeleted(int playerId, IEntity player)
 	{
 		// Build log 
@@ -67,6 +81,8 @@ modded class SCR_BaseGameMode
 		}
 	}
 
+	// Handler: game mode ended. Receives end data describing reason.
+	// Known reserved end reasons:-1..-5 (see comments).
 	protected void flabby_OnGameModeEnd(SCR_GameModeEndData endData)
 	{
 		//	Reserved values:
@@ -90,6 +106,7 @@ modded class SCR_BaseGameMode
 		}
 	}
 	
+	// Handler: a controllable entity was spawned (server-side notification).
 	protected void flabby_OnControllableSpawned()
 	{
 		// Build log 
@@ -107,6 +124,7 @@ modded class SCR_BaseGameMode
 	}
 	protected void flabby_OnWorldPostProcess()
 	{
+		// Handler: world post-processing completed. Useful for world-level events.
 		// Build log 
 		ref flabby_log log = new flabby_log(flabby_log_identifier.SCR_GameMode_116);
 		if (log && flabbyLogger)
@@ -121,6 +139,8 @@ modded class SCR_BaseGameMode
 		}
 	}
 	
+	// Handler: player entity deleted and removed from world (server-side).
+	// Includes player origin and identifier lookup for richer logs.
 	protected void flabby_OnPlayerDeleted(int playerId, IEntity player)
 	{
 		// Build log 
@@ -143,6 +163,7 @@ modded class SCR_BaseGameMode
 	}
 	protected void flabby_OnPlayerRoleChange(int playerId, EPlayerRole roleFlags)
 	{
+		// Handler: player's role (permission/flags) changed.
 		// Build log 
 		ref flabby_log log = new flabby_log(flabby_log_identifier.SCR_GameMode_114);
 		if (log && flabbyLogger)
@@ -164,6 +185,7 @@ modded class SCR_BaseGameMode
 	
 	protected void flabby_OnGameEnd()
 	{
+		// Handler: generic game end notification.
 		// Build log 
 		ref flabby_log log = new flabby_log(flabby_log_identifier.SCR_GameMode_113);
 		if (log && flabbyLogger)
@@ -179,6 +201,7 @@ modded class SCR_BaseGameMode
 	}
 	protected void flabby_Event_OnGameStart()
 	{
+		// Handler: invoked on game start events (if enabled).
 		// Build log 
 		ref flabby_log log = new flabby_log(flabby_log_identifier.SCR_GameMode_112);
 		if (log && flabbyLogger)
@@ -193,6 +216,7 @@ modded class SCR_BaseGameMode
 		}
 	}
 	
+	// Handler: a controllable was destroyed. Records victim/killer ids when available.
 	protected void flabby_OnControllableDestroyed(notnull SCR_InstigatorContextData instigatorContextData)
 	{
 		// Build log 
@@ -211,6 +235,8 @@ modded class SCR_BaseGameMode
 	}
 	protected void flabby_OnPlayerKilled(notnull SCR_InstigatorContextData instigatorContextData)
 	{
+		// Handler: player killed. Gathers victim/killer details including weapon info
+		// when available to produce a comprehensive log entry.
 		// Build log 
 		ref flabby_log log = new flabby_log(flabby_log_identifier.SCR_GameMode_110);
 		if (log && flabbyLogger)
@@ -252,6 +278,7 @@ modded class SCR_BaseGameMode
 		}
 	}
 	
+	// Handler: player spawned into the world - used to log spawn events.
 	protected void flabby_OnPlayerSpawned(int playerId, IEntity player)
 	{
 		// Build log 
@@ -273,7 +300,7 @@ modded class SCR_BaseGameMode
 		}
 	}
 	
-	//! This is to log after a player disconnects
+	// Handler: player disconnected from the server. Includes kick cause and timeout.
 	protected void flabby_OnDisconnected(int playerId, KickCauseCode cause = KickCauseCode.NONE, int timeout = -1)
 	{
 		// Build log 
@@ -297,6 +324,7 @@ modded class SCR_BaseGameMode
 	}
 	protected void flabby_OnPostCompPlayerDisconnected(int playerId, KickCauseCode cause = KickCauseCode.NONE, int timeout = -1)
 	{
+		// Handler: post-component player disconnect hook. Similar to `flabby_OnDisconnected`.
 		// Build log 
 		ref flabby_log log = new flabby_log(flabby_log_identifier.SCR_GameMode_108);
 		if (log && flabbyLogger)
@@ -317,7 +345,7 @@ modded class SCR_BaseGameMode
 		}
 	}
 	
-	//! This is to log a player's connection after they fetched their bohemia identifier. Server-only.
+	// Handler: player audit (identity fetch) succeeded. Cache information and log.
 	protected void flabby_OnAuditSuccess(int playerId)
 	{
 		// Build log 
@@ -339,6 +367,7 @@ modded class SCR_BaseGameMode
 	}
 	protected void flabby_OnAuditFailed(int playerId)
 	{
+		// Handler: player audit failed. Logs failure so admins can diagnose identity issues.
 		// Build log 
 		ref flabby_log log = new flabby_log(flabby_log_identifier.SCR_GameMode_103);
 		if (log && flabbyLogger)
@@ -358,13 +387,14 @@ modded class SCR_BaseGameMode
 	}
 	protected void flabby_OnAuditRevived(int playerId)
 	{
+		// Handler: player audit revived. Used to mark when audit attempts are retried.
 		// Build log 
 		ref flabby_log log = new flabby_log(flabby_log_identifier.SCR_GameMode_104);
 		if (log && flabbyLogger)
 		{
 			// Add playerId to log
 			log.add("function", "AuditRevived");
-			log.add("playerId", playerId);
+		 log.add("playerId", playerId);
 			log.add("playerBiId", flabby_logger.getPlayerBohemiaId(playerId));
 			log.add("playerName", flabby_logger.getPlayerName(playerId));
 			log.add("playerFaction", flabby_logger.getPlayerFaction(playerId));
@@ -377,6 +407,7 @@ modded class SCR_BaseGameMode
 	}
 	protected void flabby_OnAuditTimeouted(int playerId)
 	{
+		// Handler: audit attempt timed out for a player.
 		// Build log 
 		ref flabby_log log = new flabby_log(flabby_log_identifier.SCR_GameMode_105);
 		if (log && flabbyLogger)
@@ -396,6 +427,7 @@ modded class SCR_BaseGameMode
 	}
 	protected void flabby_OnRegistered(int playerId)
 	{
+		// Handler: player registered on server (post-audit registration).
 		// Build log 
 		ref flabby_log log = new flabby_log(flabby_log_identifier.SCR_GameMode_106);
 		if (log && flabbyLogger)
@@ -414,7 +446,7 @@ modded class SCR_BaseGameMode
 		}
 	}
 	
-	//! This is to log a player's connection. Server-only.
+	// Handler: player connected (after login/audit). Server-only.
 	protected void flabby_OnPlayerConnected(int playerId)
 	{
 		// Build log 

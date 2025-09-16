@@ -1,6 +1,16 @@
 /*
-	Classes
+ * flabby_log_class.c
+ *
+ * Purpose: Handles logging for class-related events in the game.
+ * Contains functions for tracking, formatting, and outputting class logs.
+ * Author: https://github.com/plusflabby
+ */
+
+/*
+	Classes for logging system
 */
+
+// Represents a single key-value pair stored in a log, with optional format.
 //! Data stored in log
 class flabby_data
 {
@@ -8,6 +18,7 @@ class flabby_data
 	string data;
 	flabby_log_output_format format;
 	
+	// Constructor: initializes a log data entry
 	void flabby_data(string key_, string data_, flabby_log_output_format format_ = flabby_log_output_format.RICH)
 	{
 		key = key_;
@@ -15,6 +26,8 @@ class flabby_data
 		format = format_;
 	}
 }
+
+// Main builder class for logs. Stores metadata, info, and output logic.
 //! Builder class 
 class flabby_log
 {

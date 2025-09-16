@@ -1,4 +1,11 @@
 /*
+ * flabby_log_init.c
+ *
+ * Purpose: Handles initialization of logging systems in the game.
+ * Contains functions for setting up, configuring, and starting logging.
+ * Author: https://github.com/plusflabby
+ */
+/*
 	Global Variables
 */
 //! Logger to do the log'n

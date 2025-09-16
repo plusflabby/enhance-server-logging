@@ -1,3 +1,11 @@
+/*
+ * flabby_log_webhook.c
+ *
+ * Purpose: Handles logging for webhook events in the game.
+ * Contains functions for sending, formatting, and outputting webhook logs.
+ * Author: https://github.com/plusflabby
+ */
+
 // Global rest callback for webhooks
 ref flabby_RestCallback flabby_webhookCallback = new flabby_RestCallback;
 
@@ -32,7 +40,6 @@ bool flabby_log_webhook_setup()
 	}
 	
 	return rntValue;
-	
 }
 
 void flabby_log_webhook_creation()

@@ -1,7 +1,11 @@
-/* 
-	Store all player identifiers. Use them when needed for logging,
-	This is hopfully greater than requesting identifier each log.
-*/
+/*
+ * flabby_log_player_identifiers.c
+ *
+ * Purpose: Handles logging for player identifier events in the game.
+ * Contains functions for tracking, formatting, and outputting player identifier logs.
+ * Author: https://github.com/plusflabby
+ */
+
 // Class used in array for storing player's info
 class flabby_identifier
 {
