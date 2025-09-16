@@ -23,7 +23,7 @@ void setGlobalVariables()
 		{
 			flabbyLogger = new flabby_logger();
 			flabbyIdentifier = new map<int, ref flabby_identifier>();
-			flabby_setWebhook();
+			GetGame().GetCallqueue().CallLater(flabby_setWebhook, 2000, false); // 1s
 			return;
 		}
 	}

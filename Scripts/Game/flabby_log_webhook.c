@@ -24,6 +24,8 @@ ref array<string> flabby_log_webhooks_list = {
 	"webhooks_gamemode_start"
 };
 
+ref map<flabby_log_identifier, string> flabby_log_webhook_custom = new map<flabby_log_identifier, string>();
+
 bool flabby_log_webhook_setup()
 {
 	// Check if webhook config events are in configuration json file
@@ -36,6 +38,21 @@ bool flabby_log_webhook_setup()
 		{
 			rntValue = false;
 			break;
+		}
+	}
+	
+	// Check customs
+	if (flabby_log_webhook_custom.Count() > 0)
+	{
+		foreach(flabby_log_identifier key, string value : flabby_log_webhook_custom )
+		{
+			string webhook_value = string.Empty;
+			flabby_logger_update.getValueInFile(value, webhook_value);
+			if (webhook_value == "_NONE")
+			{
+				rntValue = false;
+				break;
+			}
 		}
 	}
 	
@@ -52,6 +69,20 @@ void flabby_log_webhook_creation()
 		if (webhook_value == "_NONE")
 		{
 			flabby_logger_update.addKeyToFile(flabby_log_webhooks_list.Get(i), string.Empty);
+		}
+	}
+	
+	// Add custom logs
+	if (flabby_log_webhook_custom.Count() > 0)
+	{
+		foreach(flabby_log_identifier key, string value : flabby_log_webhook_custom )
+		{
+			string webhook_value = string.Empty;
+			flabby_logger_update.getValueInFile(value, webhook_value);
+			if (webhook_value == "_NONE")
+			{
+				flabby_logger_update.addKeyToFile(value, string.Empty);
+			}
 		}
 	}
 }
@@ -125,73 +156,92 @@ class flabby_RestCallback: RestCallback
 // Sending out webhooks
 void flabby_log_webhook_send(flabby_log_output_extension extension, flabby_log_output_format format, flabby_log_output_category category, notnull flabby_log log)
 {
+	bool sentLog = false;
 	switch (log.logId)
 	{
 		case flabby_log_identifier.SCR_GameMode_101:
 		{
 			GetWebookAndSendJson("webhooks_gamemode_player_connected", log);
+			sentLog = true;
 			break;
 		}
 		
 		case flabby_log_identifier.SCR_GameMode_106:
 		{
 			GetWebookAndSendJson("webhooks_gamemode_player_registered", log);
+			sentLog = true;
 			break;
 		}
 		
 		case flabby_log_identifier.SCR_GameMode_107:
 		{
 			GetWebookAndSendJson("webhooks_gamemode_player_disconnected", log);
+			sentLog = true;
 			break;
 		}
 		
 		case flabby_log_identifier.SCR_GameMode_109:
 		{
 			GetWebookAndSendJson("webhooks_gamemode_player_spawned", log);
+			sentLog = true;
 			break;
 		}
 		
 		case flabby_log_identifier.SCR_GameMode_110:
 		{
 			GetWebookAndSendJson("webhooks_gamemode_player_killed", log);
+			sentLog = true;
 			break;
 		}
 		
 		case flabby_log_identifier.SCR_GameMode_114:
 		{
 			GetWebookAndSendJson("webhooks_gamemode_player_deleted", log);
+			sentLog = true;
 			break;
 		}
 		
 		case flabby_log_identifier.SCR_ChatComponent_101:
 		{
 			GetWebookAndSendJson("webhooks_gamemode_chat_onnewmessage", log);
+			sentLog = true;
 			break;
 		}
 		
 		case flabby_log_identifier.SCR_Building_101:
 		{
 			GetWebookAndSendJson("webhooks_gamemode_building_delete", log);
+			sentLog = true;
 			break;
 		}
 		
 		case flabby_log_identifier.CUSTOM_Extract:
 		{
 			GetWebookAndSendJson("webhooks_player_data_extract", log);
+			sentLog = true;
 			break;
 		}
 		
 		case flabby_log_identifier.SCR_GameMode_112:
 		{
 			GetWebookAndSendJson("webhooks_gamemode_start", log);
-			break;
-		}
-		
-		default:
-		{
-			GetWebookAndSendJson("webhooks_all", log);
+			sentLog = true;
 			break;
 		}
 	}
+	if (flabby_log_webhook_custom.Count() > 0)
+	{
+		foreach(flabby_log_identifier key, string value : flabby_log_webhook_custom )
+		{
+			if (key == log.logId)
+			{
+				GetWebookAndSendJson(value, log);
+				sentLog = true;
+				break;
+			}
+		}
+	}
+	
+	if (sentLog == false) GetWebookAndSendJson("webhooks_all", log);
 	return;
 }
