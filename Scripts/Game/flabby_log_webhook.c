@@ -7,7 +7,15 @@
  */
 
 // Global rest callback for webhooks
-ref flabby_RestCallback flabby_webhookCallback = new flabby_RestCallback;
+ref RestCallback flabby_webhookCallback = new RestCallback();
+
+void flabby_webhookRestCallbackError(RestCallback cb = null)
+{
+	if (!cb)
+		Print("[enhanced-logs] A webhook has failed", LogLevel.WARNING);
+	else
+		Print("[enhanced-logs] A webhook has failed with error = " + SCR_Enum.GetEnumName(HttpCode, cb.GetHttpCode()), LogLevel.WARNING);
+}
 
 // Global list of webhook names
 ref array<string> flabby_log_webhooks_list = {
@@ -28,6 +36,16 @@ ref map<flabby_log_identifier, string> flabby_log_webhook_custom = new map<flabb
 
 bool flabby_log_webhook_setup()
 {
+	// Update global variable
+	string webhookSimpleOutput = string.Empty;
+	flabby_logger_update.getValueInFile("webhooks_simple", webhookSimpleOutput);
+	if (webhookSimpleOutput == "_NONE")
+	{
+		flabby_logger_update.addKeyToFile("webhooks_simple", "FALSE");
+	}
+	webhookSimpleOutput.ToUpper();
+	if (webhookSimpleOutput == "TRUE") flabbyWebhooksSimpleOutput = true;
+	
 	// Check if webhook config events are in configuration json file
 	bool rntValue = true;
 	for (int i = 0; i < flabby_log_webhooks_list.Count(); i++)
@@ -58,6 +76,8 @@ bool flabby_log_webhook_setup()
 	
 	return rntValue;
 }
+
+bool flabbyWebhooksSimpleOutput = false;
 
 void flabby_log_webhook_creation()
 {
@@ -128,6 +148,8 @@ void GetWebookAndSendJson(string configJsonKey, notnull flabby_log log)
 
 void flabby_setWebhook()
 {
+	flabby_webhookCallback.SetOnError(flabby_webhookRestCallbackError);
+	
 	if (flabbyLogger)
 	{
 		flabbyLogger.Event_OnLogStored.Insert(flabby_log_webhook_send);
@@ -136,22 +158,6 @@ void flabby_setWebhook()
 	
 	GetGame().GetCallqueue().CallLater(flabby_setWebhook, 1000, false); // 1s
 }
-
-class flabby_RestCallback: RestCallback
-{
-	//------------------------------------------------------------------------------------------------
-    override void OnError(int errorCode)
-    {
-        Print("A webhook has failed with error code = " + errorCode.ToString(), LogLevel.WARNING);
-		
-    };
- 
-	//------------------------------------------------------------------------------------------------
-    override void OnTimeout()
-    {
-        Print("A webhook has timed out", LogLevel.WARNING);	
-    };
-};
 
 // Sending out webhooks
 void flabby_log_webhook_send(flabby_log_output_extension extension, flabby_log_output_format format, flabby_log_output_category category, notnull flabby_log log)

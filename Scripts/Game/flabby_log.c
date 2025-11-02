@@ -241,32 +241,53 @@ modded class SCR_BaseGameMode
 		ref flabby_log log = new flabby_log(flabby_log_identifier.SCR_GameMode_110);
 		if (log && flabbyLogger)
 		{
-			// Add playerId to log
-			log.add("function", "PlayerKilled");
-			log.add("IsTeamKill", instigatorContextData.DoesPlayerKillCountAsTeamKill());
-			log.add("Relation", SCR_Enum.GetEnumName(SCR_ECharacterDeathStatusRelations, instigatorContextData.GetVictimKillerRelation()));
-			
-			//Victim
-			log.add("VictimPlayerID", instigatorContextData.GetVictimPlayerID().ToString());
-			log.add("VictimPlayerBiId", flabby_logger.getPlayerBohemiaId(instigatorContextData.GetVictimPlayerID()));
-			log.add("VictimPlayerName", flabby_logger.getPlayerName(instigatorContextData.GetVictimPlayerID()));
-			log.add("VictimPlayerFaction", flabby_logger.getPlayerFaction(instigatorContextData.GetVictimPlayerID()));
-			log.add("VictimPlayerPosition", instigatorContextData.GetVictimEntity().GetOrigin().ToString());
-			
-			//Killer
-			log.add("KillerPlayerID", instigatorContextData.GetKillerPlayerID().ToString());
-			log.add("KillerPlayerBiId", flabby_logger.getPlayerBohemiaId(instigatorContextData.GetKillerPlayerID()));
-			log.add("KillerPlayerName", flabby_logger.getPlayerName(instigatorContextData.GetKillerPlayerID()));
-			log.add("KillerPlayerFaction", flabby_logger.getPlayerFaction(instigatorContextData.GetKillerPlayerID()));
-			log.add("KillerPlayerPosition", instigatorContextData.GetKillerEntity().GetOrigin().ToString());
-			BaseWeaponManagerComponent wpnManager = BaseWeaponManagerComponent.Cast(instigatorContextData.GetKillerEntity().FindComponent(BaseWeaponManagerComponent));
-			if (wpnManager)
+			if (flabbyWebhooksSimpleOutput)
 			{
-				WeaponSlotComponent currentSlot = WeaponSlotComponent.Cast(wpnManager.GetCurrent());
-				if (currentSlot)
+				string SimpleMsg = string.Empty;
+				SimpleMsg += string.Format("(%1)", flabby_logger.getPlayerName(instigatorContextData.GetKillerPlayerID()));
+				SimpleMsg += string.Format(" Killed (%1)", flabby_logger.getPlayerName(instigatorContextData.GetVictimPlayerID()));
+				BaseWeaponManagerComponent wpnManager = BaseWeaponManagerComponent.Cast(instigatorContextData.GetKillerEntity().FindComponent(BaseWeaponManagerComponent));
+				if (wpnManager)
 				{
-					log.add("KillerPlayerWeaponType", SCR_Enum.GetEnumName(EWeaponType, currentSlot.GetWeaponType()));
-					if (currentSlot.GetUIInfo()) log.add("KillerPlayerWeaponName", currentSlot.GetUIInfo().GetName());
+					WeaponSlotComponent currentSlot = WeaponSlotComponent.Cast(wpnManager.GetCurrent());
+					if (currentSlot)
+					{
+						if (currentSlot.GetUIInfo()) SimpleMsg += string.Format(" with (%1)", currentSlot.GetUIInfo().GetName());
+					}
+				}
+				
+				log.add("Player Kill", SimpleMsg);
+			}
+			else
+			{
+				// Add playerId to log
+				log.add("function", "PlayerKilled");
+				log.add("IsTeamKill", instigatorContextData.DoesPlayerKillCountAsTeamKill());
+				log.add("Relation", SCR_Enum.GetEnumName(SCR_ECharacterDeathStatusRelations, instigatorContextData.GetVictimKillerRelation()));
+				
+				//Victim
+				log.add("VictimPlayerID", instigatorContextData.GetVictimPlayerID().ToString());
+				log.add("VictimPlayerBiId", flabby_logger.getPlayerBohemiaId(instigatorContextData.GetVictimPlayerID()));
+				log.add("VictimPlayerName", flabby_logger.getPlayerName(instigatorContextData.GetVictimPlayerID()));
+				log.add("VictimPlayerFaction", flabby_logger.getPlayerFaction(instigatorContextData.GetVictimPlayerID()));
+				log.add("VictimPlayerPosition", instigatorContextData.GetVictimEntity().GetOrigin().ToString());
+				
+				//Killer
+				log.add("KillerPlayerID", instigatorContextData.GetKillerPlayerID().ToString());
+				log.add("KillerPlayerBiId", flabby_logger.getPlayerBohemiaId(instigatorContextData.GetKillerPlayerID()));
+				log.add("KillerPlayerName", flabby_logger.getPlayerName(instigatorContextData.GetKillerPlayerID()));
+				log.add("KillerPlayerFaction", flabby_logger.getPlayerFaction(instigatorContextData.GetKillerPlayerID()));
+				log.add("KillerPlayerPosition", instigatorContextData.GetKillerEntity().GetOrigin().ToString());
+			
+				BaseWeaponManagerComponent wpnManager = BaseWeaponManagerComponent.Cast(instigatorContextData.GetKillerEntity().FindComponent(BaseWeaponManagerComponent));
+				if (wpnManager)
+				{
+					WeaponSlotComponent currentSlot = WeaponSlotComponent.Cast(wpnManager.GetCurrent());
+					if (currentSlot)
+					{
+						log.add("KillerPlayerWeaponType", SCR_Enum.GetEnumName(EWeaponType, currentSlot.GetWeaponType()));
+						if (currentSlot.GetUIInfo()) log.add("KillerPlayerWeaponName", currentSlot.GetUIInfo().GetName());
+					}
 				}
 			}
 			
@@ -310,7 +331,7 @@ modded class SCR_BaseGameMode
 			// Add playerId to log
 			log.add("function", "Disconnected");
 			log.add("playerId", playerId.ToString());
-			log.add("cause", SCR_Enum.GetEnumName(KickCauseCode, cause));
+			log.add("cause", SCR_Enum.GetEnumName(KickCauseCode, cause.GetReason()));
 			log.add("timeout", timeout.ToString());
 			log.add("playerBiId", flabby_logger.getPlayerBohemiaId(playerId));
 			log.add("playerName", flabby_logger.getPlayerName(playerId));
@@ -332,7 +353,7 @@ modded class SCR_BaseGameMode
 			// Add playerId to log
 			log.add("function", "CompDisconnected");
 			log.add("playerId", playerId.ToString());
-			log.add("cause", SCR_Enum.GetEnumName(KickCauseCode, cause));
+			log.add("cause", SCR_Enum.GetEnumName(KickCauseCode, cause.GetReason()));
 			log.add("timeout", timeout.ToString());
 			log.add("playerName", flabby_logger.getPlayerName(playerId));
 			log.add("playerBiId", flabby_logger.getPlayerBohemiaId(playerId));

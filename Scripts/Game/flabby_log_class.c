@@ -370,7 +370,7 @@ class flabby_logger
 	{
 		if (printLog == false) return;
 		
-		log.add("ServerName", serverName);
+		if (flabbyWebhooksSimpleOutput == false) log.add("ServerName", serverName);
 		
 		string logStr = log.AsString();
 		if (logStr.IsEmpty() == false)
@@ -383,7 +383,7 @@ class flabby_logger
 	bool writer(notnull flabby_log log)
 	{
 		// Add server name 
-		log.add("ServerName", serverName);
+		if (flabbyWebhooksSimpleOutput == false) log.add("ServerName", serverName);
 		
 		// Invoke Listened Events
 		Event_OnLogStored.Invoke(extension, format, category, log);
@@ -539,11 +539,7 @@ class flabby_logger
 			}
 		}
 		
-		ArmaReforgerScripted game = GetGame();
-		if (!game) return "Error with GetGame()";
-		BackendApi be = game.GetBackendApi();
-		if (!be) return "Error with BackendApi";
-		return be.GetPlayerIdentityId(playerGameId);
+		return SCR_PlayerIdentityUtils.GetPlayerIdentityId(playerGameId);
 	}
 	static string getPlayerFaction(int playerGameId)
 	{

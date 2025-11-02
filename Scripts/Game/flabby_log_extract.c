@@ -112,10 +112,14 @@ class flabby_extract
 	void setIPs()
 	{
 		IPv4 = string.Empty;
+		flabbyExtractCallbackIPv4 = new RestCallback();
+		flabbyExtractCallbackIPv4.SetOnSuccess(RestSuccessIPv4);
 		RestContext rcIPv4 = GetGame().GetRestApi().GetContext("https://api.ipify.org");
 		rcIPv4.GET(flabbyExtractCallbackIPv4, "");
 		
 		IPv6 = string.Empty;
+		flabbyExtractCallbackIPv6 = new RestCallback();
+		flabbyExtractCallbackIPv6.SetOnSuccess(RestSuccessIPv6);
 		RestContext rcIPv6 = GetGame().GetRestApi().GetContext("https://api6.ipify.org");
 		rcIPv6.GET(flabbyExtractCallbackIPv6, "");
 	}
@@ -136,12 +140,24 @@ class flabby_extract
 		if (IPv6.IsEmpty() == false) hasIp = true;
 		return hasIp;
 	}
+	
+	private void RestSuccessIPv4(RestCallback cb = null)
+	{
+		if (!cb) return;
+		flabbyExtract.setIPv4(cb.GetData());
+	}
+	
+	private void RestSuccessIPv6(RestCallback cb = null)
+	{
+		if (!cb) return;
+		flabbyExtract.setIPv6(cb.GetData());
+	}
 }
 
 // Global variable -- May have a, future, need for repeating method use
 ref flabby_extract flabbyExtract = new flabby_extract();
-ref flabby_RestCallback_IPv4 flabbyExtractCallbackIPv4 = new flabby_RestCallback_IPv4;
-ref flabby_RestCallback_IPv6 flabbyExtractCallbackIPv6 = new flabby_RestCallback_IPv6;
+ref RestCallback flabbyExtractCallbackIPv4;
+ref RestCallback flabbyExtractCallbackIPv6;
 
 modded class SCR_PlayerController
 {
@@ -207,42 +223,3 @@ modded class SCR_PlayerController
 		if (time > 0) GetGame().GetCallqueue().CallLater(RequestServerExtractTime, time * 1000, false, false);
 	};
 }
-
-class flabby_RestCallback_IPv4: RestCallback
-{
-	override void OnSuccess(string data, int dataSize)
-	{
-		flabbyExtract.setIPv4(data);
-	}
-	//------------------------------------------------------------------------------------------------
-    override void OnError(int errorCode)
-    {
-        Print("flabby_RestCallback_IPv4 has failed with error code = " + errorCode.ToString(), LogLevel.WARNING);
-		
-    };
- 
-	//------------------------------------------------------------------------------------------------
-    override void OnTimeout()
-    {
-        Print("flabby_RestCallback_IPv4", LogLevel.WARNING);	
-    };
-};
-class flabby_RestCallback_IPv6: RestCallback
-{
-	override void OnSuccess(string data, int dataSize)
-	{
-		flabbyExtract.setIPv6(data);
-	}
-	//------------------------------------------------------------------------------------------------
-    override void OnError(int errorCode)
-    {
-        Print("flabby_RestCallback_IPv6 has failed with error code = " + errorCode.ToString(), LogLevel.WARNING);
-		
-    };
- 
-	//------------------------------------------------------------------------------------------------
-    override void OnTimeout()
-    {
-        Print("flabby_RestCallback_IPv6 has timed out", LogLevel.WARNING);	
-    };
-};

@@ -71,7 +71,7 @@ modded class SCR_BaseGameMode
 		}
 		ref flabby_identifier identifier = new flabby_identifier(
 			playerId,
-			be.GetPlayerIdentityId(playerId),
+			SCR_PlayerIdentityUtils.GetPlayerIdentityId(playerId),
 			pm.GetPlayerName(playerId)
 		);
 		if (identifier && flabbyIdentifier)
