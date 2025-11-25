@@ -39,15 +39,15 @@ modded class SCR_CampaignBuildingNetworkComponent
 	
 	// Override: when a player deletes a composition (building) by action,
 	// call the RPC to notify the server so the deletion is logged centrally.
-	override void DeleteCompositionByUserAction(notnull IEntity composition)
+	override void DeleteCompositionByUserAction(notnull IEntity composition, int userPlayerId)
 	{
-		super.DeleteCompositionByUserAction(composition);
+		super.DeleteCompositionByUserAction(composition, userPlayerId);
 
 		RplComponent comp = RplComponent.Cast(composition.FindComponent(RplComponent));
 		if (!comp)
 			return;
 
 		// Send reliable RPC to server with the composition's RPL id and current player id
-		Rpc(RpcAsk_SendDeleteLog, comp.Id(), GetGame().GetPlayerController().GetPlayerId());
+		Rpc(RpcAsk_SendDeleteLog, comp.Id(), userPlayerId);
 	}
 }
